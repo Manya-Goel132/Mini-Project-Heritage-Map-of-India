@@ -71,6 +71,19 @@ In strict accordance with the project abstract and presentation specifications (
 
 ---
 
+## 📸 Visual Showcase & Interface Previews
+
+### 1. Standard Desktop Cartography View (100% Zoom)
+![Heritage Map Desktop Overview](docs/screenshots/overview_desktop.png)
+
+### 2. Zoomed-In Interactive Perspective (125% Zoom)
+![Zoomed-In View](docs/screenshots/zoomed_in_view.png)
+
+### 3. Broad Cartography Overview (67% Zoom)
+![Zoomed-Out View](docs/screenshots/zoomed_out_view.png)
+
+---
+
 ## 📁 Repository Directory Structure
 
 ```text
@@ -78,6 +91,7 @@ Interactive-Geographical-Heritage-Map/
 │
 ├── index.html                   # Main entry point and semantic DOM layout
 ├── README.md                    # Comprehensive project documentation
+├── .gitignore                   # Ignored files (system, logs, temp files)
 ├── Manya_Goel_Mini_Project_PPT.pdf      # Official academic presentation
 ├── Manya_Goel_Mini_Project_Abstract.pdf # Project synopsis and problem statement
 │
@@ -91,34 +105,77 @@ Interactive-Geographical-Heritage-Map/
 ├── data/
 │   └── india_states.geojson     # Vector boundary GeoJSON for all Indian States & UTs
 │
-├── audio/                       # Authentic regional folk recordings (CCRT & Commons)
+├── docs/
+│   └── screenshots/             # Interface showcase captures
+│       ├── overview_desktop.png # Standard 100% desktop cartography view
+│       ├── zoomed_out_view.png  # 67% broad cartography view
+│       └── zoomed_in_view.png   # 125% focused state view
+│
+├── audio/                       # 55 Complete Regional Folk Audio Tracks
+│   │
+│   ├── # Authentic Field & Studio Recordings (CCRT, ICCR & Wikimedia)
+│   ├── assam_real.mp3           # Bihu dhol, pepa horn & taal
+│   ├── bansuri_real.ogg         # Traditional Indian bamboo bansuri
+│   ├── carnatic_concert_real.ogg# South Indian classical ensemble (Veena, Flute, Mridangam)
+│   ├── gujarat_garba_real.mp3   # Authentic Gujarati garba dhol & shehnai
+│   ├── kashmir_santoor_real.mp3 # Kashmiri sufi santoor & rabab
+│   ├── kerala_real.ogg          # Sopana sangeetham & chenda melam
+│   ├── ladakh_tibetan_real.ogg  # Buddhist monastery dungchen horns & cymbals
+│   ├── maharashtra_real.ogg     # Lavani dholki & lejim
+│   ├── manipur_real.mp3         # Manipuri pung cholom & pena
+│   ├── odisha_real.mp3          # Odissi mardala & flute
 │   ├── punjab_real.wav          # Punjab folk dhol & boliyan
 │   ├── rajasthan_real.ogg       # Desert folk kamaicha & sarangi
-│   ├── maharashtra_real.ogg     # Lavani dholki & lejim
-│   ├── uttar_pradesh_real.wav   # Braj Holi folk rasia
 │   ├── tamil_nadu_real.ogg      # Nadaswaram & thavil temple soundscape
-│   ├── kerala_real.ogg          # Sopana sangeetham & chenda melam
-│   ├── uttarakhand_real.ogg     # Kumaoni & Garhwali dhol-damau
-│   ├── bansuri_real.ogg         # Traditional Indian bamboo bansuri
-│   ├── gujarat_garba_real.mp3   # Authentic Gujarati garba dhol
-│   ├── west_bengal_real.mp3     # Baul folk ektara & dotara
 │   ├── tribal_folk_real.mp3     # Central Indian mandri & madal drumming
-│   ├── ladakh_tibetan_real.ogg  # Buddhist monastery dungchen horns & cymbals
-│   ├── kashmir_santoor_real.mp3 # Kashmiri sufi santoor & rabab
-│   ├── odisha_real.mp3          # Odissi mardala & flute
-│   ├── assam_real.mp3           # Bihu dhol, pepa horn & taal
-│   ├── manipur_real.mp3         # Manipuri pung cholom & pena
-│   └── carnatic_concert_real.ogg# South Indian classical ensemble
+│   ├── uttar_pradesh_real.wav   # Braj Holi folk rasia & harmonium
+│   ├── uttarakhand_real.ogg     # Kumaoni & Garhwali dhol-damau
+│   ├── west_bengal_real.mp3     # Baul folk ektara & dotara
+│   │
+│   └── # State & Union Territory Regional Acoustic Soundscapes
+│       ├── andaman_and_nicobar_islands.wav
+│       ├── andhra_pradesh.wav
+│       ├── arunachal_pradesh.wav
+│       ├── assam.wav
+│       ├── bihar.wav
+│       ├── chandigarh.wav
+│       ├── chhattisgarh.wav
+│       ├── dadra_and_nagar_haveli.wav
+│       ├── dadra_and_nagar_haveli_and_daman_and_diu.wav
+│       ├── daman_and_diu.wav
+│       ├── delhi.wav
+│       ├── goa.wav
+│       ├── gujarat.wav
+│       ├── haryana.wav
+│       ├── himachal_pradesh.wav
+│       ├── jammu_and_kashmir.wav
+│       ├── jharkhand.wav
+│       ├── karnataka.wav
+│       ├── kerala.wav
+│       ├── ladakh.wav
+│       ├── lakshadweep.wav
+│       ├── madhya_pradesh.wav
+│       ├── maharashtra.wav
+│       ├── manipur.wav
+│       ├── meghalaya.wav
+│       ├── mizoram.wav
+│       ├── nagaland.wav
+│       ├── odisha.wav
+│       ├── puducherry.wav
+│       ├── punjab.wav
+│       ├── rajasthan.wav
+│       ├── sikkim.wav
+│       ├── tamil_nadu.wav
+│       ├── telangana.wav
+│       ├── tripura.wav
+│       ├── uttar_pradesh.wav
+│       ├── uttarakhand.wav
+│       └── west_bengal.wav
 │
-├── vendor/
-│   └── leaflet/                 # Local Leaflet v1.9.4 distribution (with CDN fallback)
-│       ├── leaflet.js
-│       └── leaflet.css
-│
-└── test_screenshots/            # Automated verification captures (Chrome Headless)
-    ├── final_check_100.png      # Verification at 100% standard zoom
-    ├── final_check_67.png       # Verification at 67% zoomed-out view
-    └── final_check_125.png      # Verification at 125% zoomed-in view
+└── vendor/
+    └── leaflet/                 # Local Leaflet v1.9.4 distribution (with CDN fallback)
+        ├── leaflet.js
+        └── leaflet.css
 ```
 
 ---
