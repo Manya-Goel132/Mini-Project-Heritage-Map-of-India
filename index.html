@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Geographical Heritage Map of India</title>
+  <meta name="description" content="A multisensory digital cartography web platform showcasing India's cultural heritage, GI-tagged products, folk dances, and traditional 5-second folk music soundscapes.">
+  <meta name="keywords" content="Cultural Heritage, Interactive Web Map, Leaflet.js, GeoJSON, Multisensory UI, Indian Traditions, Front-end Development, Web Audio API, GI Tags">
+  <meta name="author" content="Manya Goel (2400300100237), Inderprastha Engineering College">
+
+  <!-- Google Fonts: Cinzel & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS (Local with CDN Fallback) -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';">
+  
+  <!-- Project Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- App Wrapper -->
+  <div class="app-container">
+
+    <!-- Top Header Bar -->
+    <header class="app-header" role="banner">
+      <div class="brand-section">
+        <div class="brand-icon-wrapper" aria-hidden="true">
+          <span>🏛️</span>
+        </div>
+        <div class="brand-titles">
+          <h1 class="brand-title">
+            Heritage Map of India
+            <span class="brand-badge">Problem 26197</span>
+          </h1>
+          <span class="brand-subtitle">Multisensory Digital Cartography • Inderprastha Engineering College</span>
+        </div>
+      </div>
+
+      <!-- Center Search Bar with Autocomplete -->
+      <div class="header-center">
+        <div class="search-box">
+          <div class="search-input-wrapper">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input 
+              type="text" 
+              id="searchInput" 
+              class="search-input" 
+              placeholder="Search states, GI tags, folk arts (e.g. Kanjeevaram, Chhau)..."
+              autocomplete="off"
+              aria-label="Search Indian States and Heritage"
+            >
+          </div>
+          <div id="searchDropdown" class="search-dropdown" role="listbox"></div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <button id="soundToggleBtn" class="header-btn" title="Toggle Soundscape Autoplay" aria-label="Toggle Sound">
+          🔊 Sound On
+        </button>
+        <button id="randomStateBtn" class="header-btn btn-gold" title="Explore a Random State" aria-label="Explore Random State">
+          🎲 Explore
+        </button>
+        <button id="aboutBtn" class="header-btn" title="View Project Information & Tech Stack" aria-label="About Project">
+          ℹ️ About
+        </button>
+      </div>
+    </header>
+
+    <!-- Filter Layers & Statistics Bar -->
+    <nav class="filter-bar" aria-label="Heritage Layer Filters">
+      <div class="filter-categories" role="tablist">
+        <button class="filter-pill active" data-filter="all" role="tab" aria-selected="true">🌟 All Traditions</button>
+        <button class="filter-pill" data-filter="gi" role="tab" aria-selected="false">🏷️ GI-Tagged Products</button>
+        <button class="filter-pill" data-filter="dance" role="tab" aria-selected="false">💃 Folk Dance & Arts</button>
+        <button class="filter-pill" data-filter="monuments" role="tab" aria-selected="false">🏛️ Heritage Sites</button>
+        <button class="filter-pill" data-filter="music" role="tab" aria-selected="false">🪕 Folk Soundscapes</button>
+      </div>
+
+      <div class="stats-ticker">
+        <span class="stat-item"><span class="stat-val">37</span> States & UTs</span>
+        <span class="stat-item">•</span>
+        <span class="stat-item"><span class="stat-val">120+</span> GI Tags</span>
+        <span class="stat-item">•</span>
+        <span class="stat-item"><span class="stat-val">5s</span> Audio Snippets</span>
+      </div>
+    </nav>
+
+    <!-- Main Content Area: Leaflet Map -->
+    <main class="main-content" role="main">
+      <div id="map" aria-label="Interactive Map of India"></div>
+
+      <!-- Floating Controls on Map -->
+      <div class="map-floating-overlay">
+        <button id="resetMapBtn" class="floating-action-btn" title="Reset View to All India" aria-label="Reset Map View">
+          🇮🇳
+        </button>
+      </div>
+
+      <!-- Map Legend -->
+      <div class="map-legend" role="complementary" aria-label="Geographical Zones Legend">
+        <div class="legend-title">
+          <span>Geographical Zones</span>
+          <span style="font-size: 11px;">🗺️</span>
+        </div>
+        <div class="legend-items">
+          <div class="legend-item"><span class="legend-color-dot dot-north"></span> North India</div>
+          <div class="legend-item"><span class="legend-color-dot dot-south"></span> South India</div>
+          <div class="legend-item"><span class="legend-color-dot dot-east"></span> East India</div>
+          <div class="legend-item"><span class="legend-color-dot dot-west"></span> West India</div>
+          <div class="legend-item"><span class="legend-color-dot dot-central"></span> Central India</div>
+          <div class="legend-item"><span class="legend-color-dot dot-northeast"></span> North-East India</div>
+          <div class="legend-item"><span class="legend-color-dot dot-ut"></span> Union Territories</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Quick Carousel: Quick State Selection -->
+    <footer class="bottom-carousel-bar" role="contentinfo">
+      <span class="carousel-label"><span>🗺️</span> Quick Jump:</span>
+      <div id="quickCarousel" class="carousel-scroll-wrap" role="region" aria-label="Quick State Switcher"></div>
+    </footer>
+
+  </div>
+
+  <!-- ========================================================================
+       Heritage Detail Modal / Drawer Card
+       ======================================================================== -->
+  <div id="heritageModal" class="heritage-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="cardStateName">
+    <div class="heritage-card">
+      
+      <!-- Card Hero Image Banner -->
+      <div class="card-hero">
+        <img id="cardHeroImg" class="card-hero-bg" src="" alt="State Heritage Scene">
+        <div class="card-hero-gradient"></div>
+        <button id="cardCloseBtn" class="card-close-btn" title="Close Modal (Esc)" aria-label="Close Modal">✕</button>
+        
+        <div class="card-hero-content">
+          <span id="cardRegionBadge" class="card-region-badge">📍 Region</span>
+          <div class="card-title-row">
+            <h2 id="cardStateName" class="card-state-name">State Name</h2>
+            <span id="cardCapital" class="card-capital-tag">Capital: City</span>
+          </div>
+          <p id="cardTagline" class="card-tagline">"Cultural Heritage Tagline"</p>
+        </div>
+      </div>
+
+      <!-- Multisensory 5-Second Traditional Audio Player Bar (PPT Slide 4) -->
+      <div class="audio-player-bar">
+        <div class="audio-progress-track">
+          <div id="audioProgressBar" class="audio-progress-fill"></div>
+        </div>
+        
+        <div class="audio-left-meta">
+          <button id="audioPlayBtn" class="audio-play-btn" title="Play / Pause Audio" aria-label="Play 5s Traditional Soundscape">▶</button>
+          <div class="audio-meta-text">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="audioStatusText" class="audio-status-label">🎵 5-Second Traditional Soundscape</span>
+              <span id="audioSourceBadge" class="gi-tag-pill" style="display:none; font-size: 0.6rem; background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #6ee7b7;">✨ Live Recording</span>
+            </div>
+            <span id="cardInstruments" class="audio-instruments">Traditional Folk Instruments</span>
+          </div>
+        </div>
+
+        <div class="audio-right-controls" style="display: flex; align-items: center; gap: 10px;">
+          <!-- Forced Short-Play Mode Toggle Button -->
+          <button id="audioModeToggleBtn" class="header-btn" style="height: 30px; padding: 0 10px; font-size: 0.72rem; border-color: rgba(255, 140, 0, 0.4);" title="Toggle Forced Short-Play (5s) vs Full Track">
+            ⚡ 5s Forced
+          </button>
+          <!-- Live Audio Equalizer Wave Animation -->
+          <div id="audioEqualizer" class="audio-equalizer" aria-hidden="true">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+          </div>
+          <div id="audioCountdown" class="audio-countdown" title="Snippet Play Duration">5.0s</div>
+        </div>
+      </div>
+
+      <!-- Card Body: Cultural Heritage Data -->
+      <div class="card-body">
+        
+        <!-- Cultural Summary Narrative -->
+        <div>
+          <h3 class="heritage-section-title">📖 Cultural Legacy & Narrative</h3>
+          <p id="cardSummary" style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6;"></p>
+        </div>
+
+        <!-- GI Tagged Products (Slide 3 & Abstract) -->
+        <div>
+          <h3 class="heritage-section-title">🏷️ Geographical Indication (GI) Tagged Products</h3>
+          <div id="cardGiGrid" class="heritage-grid"></div>
+        </div>
+
+        <!-- Folk Dance & Performing Arts (e.g. Chhau Dance in Abstract) -->
+        <div>
+          <h3 class="heritage-section-title">💃 Traditional Folk Dance & Performing Arts</h3>
+          <div id="cardDanceBox" class="spotlight-box"></div>
+        </div>
+
+        <!-- Indigenous Crafts -->
+        <div>
+          <h3 class="heritage-section-title">🎨 Indigenous Crafts & Artforms</h3>
+          <div id="cardCraftsCloud" class="tags-cloud"></div>
+        </div>
+
+        <!-- Historic Monuments & UNESCO Heritage -->
+        <div>
+          <h3 class="heritage-section-title">🏛️ Historic Monuments & Architecture</h3>
+          <div id="cardSitesCloud" class="tags-cloud"></div>
+        </div>
+
+      </div>
+
+      <!-- Card Footer Navigation -->
+      <div class="card-footer">
+        <button id="prevStateBtn" class="nav-state-btn" aria-label="Previous State">← Previous State</button>
+        <span class="modal-attribution">Interactive Heritage Map of India • Mini Project</span>
+        <button id="nextStateBtn" class="nav-state-btn" aria-label="Next State">Next State →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       About Project Modal (Academic Details from PPT & Abstract)
+       ======================================================================== -->
+  <div id="aboutModal" class="heritage-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="aboutProjectTitle">
+    <div class="heritage-card about-modal">
+      <div class="about-header">
+        <button id="aboutCloseBtn" class="card-close-btn" title="Close About Modal" aria-label="Close About">✕</button>
+        <h2 id="aboutProjectTitle" class="about-title">Interactive Geographical Heritage Map of India</h2>
+        <p class="about-subtitle">Problem Statement 26197: Innovative ideas showcasing Indian traditions</p>
+      </div>
+
+      <div class="about-body">
+        <!-- Academic Information -->
+        <div class="academic-card">
+          <div class="academic-row">
+            <span class="academic-key">Student Name:</span>
+            <span class="academic-val">Manya Goel</span>
+          </div>
+          <div class="academic-row">
+            <span class="academic-key">Roll Number:</span>
+            <span class="academic-val">2400300100237</span>
+          </div>
+          <div class="academic-row">
+            <span class="academic-key">Faculty Guide:</span>
+            <span class="academic-val">Ms. Disha</span>
+          </div>
+          <div class="academic-row">
+            <span class="academic-key">Institution:</span>
+            <span class="academic-val">Inderprastha Engineering College, Ghaziabad</span>
+          </div>
+        </div>
+
+        <!-- Problem Statement & Solution -->
+        <div>
+          <h3 style="font-size: 0.95rem; color: #ffd866; margin-bottom: 6px;">📖 Problem & Solution</h3>
+          <p style="margin-bottom: 8px;">
+            Traditional methods relying on static textbooks and flat diagrams treat cultural history as fixed data points, failing to evoke the living, spatial reality of Indian heritage.
+          </p>
+          <p>
+            This dynamic web cartography platform bridges ancient traditions with modern front-end engineering. Users interact with a clickable vector map of India, exploring GI-tagged crafts, folk dances, and listening to authentic 5-second traditional soundscapes for each region.
+          </p>
+        </div>
+
+        <!-- Technology Stack (PPT Slide 5) -->
+        <div>
+          <h3 style="font-size: 0.95rem; color: #ffd866; margin-bottom: 8px;">⚡ Exact Technology Stack</h3>
+          <div class="tech-stack-list">
+            <div class="tech-item">
+              <div class="tech-name">HTML5 / CSS3</div>
+              <div class="tech-desc">Responsive UI, glassmorphism, tailored Indian heritage aesthetics.</div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-name">Vanilla JavaScript</div>
+              <div class="tech-desc">Lightweight client-side interactivity without heavy dependencies.</div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-name">Leaflet.js</div>
+              <div class="tech-desc">Interactive mapping engine rendering GeoJSON vector boundaries.</div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-name">HTML5 Audio API</div>
+              <div class="tech-desc">Native audio engine dynamically streaming 5-second folk soundscapes.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Architecture (PPT Slide 6) -->
+        <div>
+          <h3 style="font-size: 0.95rem; color: #ffd866; margin-bottom: 6px;">🗄️ System Architecture</h3>
+          <p>
+            • <code>data/india_states.geojson</code>: Renders precise state vector polygons.<br>
+            • <code>const stateData = [...]</code>: Houses rich cultural datasets per state (GI tags, folk arts, soundscape paths).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS (Local with CDN Fallback) -->
+  <script src="vendor/leaflet/leaflet.js" onerror="this.onerror=null;this.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';"></script>
+
+  <!-- Project Scripts (Exact match to Slide 6 Architecture) -->
+  <script src="js/stateData.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
