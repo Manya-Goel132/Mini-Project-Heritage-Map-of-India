@@ -1,11 +1,13 @@
 # Interactive Geographical Heritage Map of India 🇮🇳
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-success?logo=vercel&logoColor=white)](https://mini-project-heritage-map-of-india.vercel.app/)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tech Stack](https://img.shields.io/badge/Tech_Stack-HTML5_|_CSS3_|_JavaScript_|_Leaflet.js-orange)](https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India)
 
 > **College Mini-Project | Problem Statement 26197: Innovative ideas showcasing Indian traditions**  
-> **GitHub Repository:** [https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India](https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India)  
+> 🌐 **Live Web Application:** [https://mini-project-heritage-map-of-india.vercel.app](https://mini-project-heritage-map-of-india.vercel.app/)  
+> 📁 **GitHub Repository:** [https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India](https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India)  
 > **Student:** Manya Goel (University Roll No: `2400300100237`)  
 > **Faculty Guide:** Ms. Disha  
 > **Institution:** Inderprastha Engineering College (IPEC), Ghaziabad  
@@ -121,8 +123,15 @@ Interactive-Geographical-Heritage-Map/
 
 ---
 
-## 🚀 Getting Started & Local Setup
+## 🚀 Live Demo & Local Setup
 
+### 🌐 Live Deployment
+The interactive web map is live on Vercel:  
+👉 **[https://mini-project-heritage-map-of-india.vercel.app](https://mini-project-heritage-map-of-india.vercel.app/)**
+
+---
+
+### Local Setup
 The project is completely self-contained and requires **zero external build tools or node modules**. It runs directly on any modern browser supporting HTML5 and ES6.
 
 ### 1. Clone the Repository
@@ -177,6 +186,7 @@ This project is submitted in partial fulfillment of the requirements for the **M
 - **University Roll Number:** `2400300100237`
 - **Problem Statement ID:** `26197`
 - **Faculty Guide:** Ms. Disha
+- **Live Web Application:** [https://mini-project-heritage-map-of-india.vercel.app](https://mini-project-heritage-map-of-india.vercel.app/)
 - **GitHub Repository:** [Manya-Goel132/Mini-Project-Heritage-Map-of-India](https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India)
 
 ---
