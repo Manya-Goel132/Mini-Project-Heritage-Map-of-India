@@ -31,9 +31,9 @@ In strict accordance with the project abstract and presentation specifications (
 | :--- | :--- | :--- |
 | **Markup & Semantics** | **HTML5** | Semantic, accessible DOM structure (`header`, `main`, `nav`, `footer`, ARIA roles). |
 | **Styling & Aesthetics** | **CSS3 (Vanilla)** | Glassmorphism, CSS Custom Properties (Design Tokens), responsive Flexbox viewport architecture, smooth transitions. Zero heavy CSS frameworks. |
-| **Logic & Interactivity** | **Vanilla JavaScript (ES6+)** | State management, search indexing, event delegation, audio synthesis, and modal lifecycle. |
-| **Cartography & GIS** | **Leaflet.js (v1.9.4)** | Client-side interactive tile rendering, vector polygon GeoJSON layer parsing, dynamic hover/click boundaries. |
-| **Spatial Dataset** | **GeoJSON (`data/india_states.geojson`)** | Comprehensive spatial coordinates for all 37 Indian States and Union Territories. |
+| **Logic & Interactivity** | **Vanilla JavaScript (ES6+)** | State management, joint state & river search indexing, event delegation, audio synthesis, and modal lifecycle. |
+| **Cartography & GIS** | **Leaflet.js (v1.9.4)** | Client-side interactive tile rendering, vector polygon GeoJSON layer parsing, vector centerline river rendering, dynamic hover/click boundaries. |
+| **Spatial Datasets** | **GeoJSON (`india_states.geojson` & `india_rivers.geojson`)** | Comprehensive spatial coordinates for all 37 Indian States and Union Territories + 35+ high-precision major river centerlines and basins. |
 | **Audio Subsystem** | **HTML5 Audio API** | Real field recordings, custom playback controller, **Forced Short-Play (5-second snippet engine)** with audio cue offsets and smooth volume fade-out. |
 | **Basemap Provider** | **Esri World Dark Gray Canvas** | Free, high-contrast dark cartography with zero watermarks and zero external API key requirements. |
 
@@ -41,12 +41,18 @@ In strict accordance with the project abstract and presentation specifications (
 
 ## 🌟 Core Features & System Capabilities
 
-### 1. Interactive Vector Digital Cartography
-- **All 37 States and UTs Mapped:** Clickable vector polygons rendered using Leaflet.js with clean boundaries and smooth hover effects.
-- **7 Distinct Cultural Zones:** Region-coded styling representing North, South, East, West, Central, North-East, and Union Territories.
-- **Dynamic Floating Legend:** Color-coded regional reference card that adapts seamlessly across all display sizes and zoom levels.
+### 1. Distinct State Color Cartography & Dual-Mode Visualization
+- **Curated Palette for All 37 States & UTs:** Every individual state and union territory features a custom-curated, vibrant heritage color (e.g. Royal Rajputana Crimson for Rajasthan, Marigold Sunset Orange for Gujarat, Shivaji Indigo for Maharashtra, Dravidian Ruby for Tamil Nadu, God's Own Viridian for Kerala).
+- **Dual Coloring Modes:** Toggle effortlessly between **🎨 Distinct State Hues** and **🗺️ Regional Zones** (North, South, East, West, Central, North-East, and UTs) via the floating map toolbar or the dynamic legend.
+- **Dynamic Floating Legend:** Color-coded reference card that updates in real-time between Distinct and Regional views, adapting cleanly across desktop and mobile.
 
-### 2. Multisensory 5-Second Traditional Soundscape Engine (PPT Slide 4)
+### 2. Sacred Rivers of India (Hydrological Lifelines)
+- **35+ Major Centerlines & Basins:** Features high-precision vector centerlines with luminescent multi-layer glowing effects for major rivers: Ganga, Yamuna, Brahmaputra, Indus, Godavari, Krishna, Kaveri, Narmada, Tapti, Mahanadi, Sutlej, Chenab, Jhelum, Ravi, Beas, Chambal, Tungabhadra, Teesta, Betwa, Son, Ghaghara, Gandak, Penna, Sabarmati, and Periyar.
+- **Interactive River Details Modal:** Click any river to inspect its Devanagari name, river system, official length, glacial/mountain origin, discharge basin, traversed states, historic ghats/monuments, and cultural/spiritual significance.
+- **Two-Way State-River Connectivity:** State cards display passing rivers as interactive pills; River cards display traversed states as interactive chips for seamless exploration.
+- **River Focus Mode:** Click "Highlight River Course" to automatically center and zoom the camera onto the river's entire basin.
+
+### 3. Multisensory 5-Second Traditional Soundscape Engine (PPT Slide 4)
 - **Authentic Field & Studio Recordings:** Incorporates 17 verified traditional recordings sourced from the **Centre for Cultural Resources and Training (CCRT, Ministry of Culture, Govt. of India)**, **ICCR**, and **Wikimedia Commons** (e.g., Punjab Dhol & Algoze, Rajasthan Kamaicha & Khartal, Maharashtra Lavani Dholki, Kashmir Santoor & Rabab, Assam Bihu Pepa, Ladakh Tibetan Dungchen, Carnatic Flute & Veena).
 - **Client-Side Forced Short-Play:** 
   - Complete, uncompressed audio tracks are preserved on disk.
@@ -54,33 +60,36 @@ In strict accordance with the project abstract and presentation specifications (
   - Includes a user toggle between **⚡ 5s Forced Snippet** and **🎵 Full Track** mode.
 - **Visual Equalizer Wave:** Real-time animated CSS sound equalizer and interactive progress bar indicating exact snippet duration.
 
-### 3. Comprehensive Cultural Heritage Catalog
+### 4. Comprehensive Cultural Heritage Catalog
 - **Geographical Indication (GI) Tags:** Over 120+ registered GI tags documented across Indian states (e.g., Kanjeevaram Silk, Darjeeling Tea, Naga Mircha, Kashmiri Pashmina, Pochampally Ikat, Aranmula Kannadi, Channapatna Toys, Blue Pottery of Jaipur).
 - **Folk Dance & Arts:** Rich entries covering classical and regional folk traditions (Kathakali, Chhau, Garba, Rouf, Bihu, Yakshagana, Ghoomar, Cheraw, Kalbelia).
 - **Cultural Narratives:** Curated historical backgrounds, state capitals, regional badges, and traditional instruments cataloged for every state.
 
-### 4. Interactive Navigation & Exploration Tools
-- **Instant Search with Autocomplete:** Real-time query filtering across state names, GI products, dance forms, and instruments with dropdown suggestions and auto-focus.
-- **Layer Category Filters:** Switch views between *All Traditions*, *GI-Tagged Products*, *Folk Dance & Arts*, *Heritage Sites*, and *Folk Soundscapes*.
+### 5. Interactive Navigation & Exploration Tools
+- **Joint State & River Autocomplete Search:** Real-time query filtering across states, capital cities, GI products, dance forms, and river systems with custom-badged suggestion items.
+- **Layer Category Filters:** Switch views between *All Traditions*, *Sacred Rivers*, *GI-Tagged Products*, *Folk Dance & Arts*, *Heritage Sites*, and *Folk Soundscapes*.
 - **Quick-Jump State Carousel:** Bottom carousel bar displaying instant-navigation chips for all states and UTs.
 - **Random State Explorer (🎲 Explore):** One-click discovery mode that pans the map and opens the heritage card for an unexplored Indian state.
 
-### 5. Zoom-Resilient Responsive Architecture
+### 6. Zoom-Resilient Responsive Architecture
 - Rigid flex-column viewport architecture (`height: 100dvh`, zero window scrollbars) preventing layout shifts, overlap, or clipping.
-- Rigorously tested and visually verified in Google Chrome across standard (100%), zoomed-out (67%), and zoomed-in (125%, 150%) states.
+- Rigorously tested and visually verified in Google Chrome across standard (100%), zoomed-out (67%), zoomed-in (125%), and mobile viewports.
 
 ---
 
 ## 📸 Visual Showcase & Interface Previews
 
-### 1. Standard Desktop Cartography View (100% Zoom)
+### 1. Distinct State Colors & Glowing Sacred Rivers Overview (100% Zoom)
 ![Heritage Map Desktop Overview](docs/screenshots/overview_desktop.png)
 
-### 2. Zoomed-In Interactive Perspective (125% Zoom)
-![Zoomed-In View](docs/screenshots/zoomed_in_view.png)
+### 2. Interactive Sacred River Details Modal
+![River Details Modal](docs/screenshots/river_modal_details.png)
 
-### 3. Broad Cartography Overview (67% Zoom)
-![Zoomed-Out View](docs/screenshots/zoomed_out_view.png)
+### 3. State Heritage Card with GI Tags & Passing River Lifelines
+![State Heritage Modal with Rivers](docs/screenshots/state_modal_with_rivers.png)
+
+### 4. Regional Zones Mode & Focused River View
+![Regional Zones View](docs/screenshots/regional_zones_view.png)
 
 ---
 
@@ -99,17 +108,19 @@ Interactive-Geographical-Heritage-Map/
 │   └── styles.css               # Complete design system, glassmorphism, responsive flex
 │
 ├── js/
-│   ├── app.js                   # Application controller, Leaflet logic, audio engine
+│   ├── app.js                   # Application controller, Leaflet logic, river engine, audio engine
 │   └── stateData.js             # 37 states database (GI tags, dances, audios, summaries)
 │
 ├── data/
-│   └── india_states.geojson     # Vector boundary GeoJSON for all Indian States & UTs
+│   ├── india_states.geojson     # Vector boundary GeoJSON for all Indian States & UTs
+│   └── india_rivers.geojson     # High-precision vector centerlines for 35+ major rivers & basins
 │
 ├── docs/
 │   └── screenshots/             # Interface showcase captures
-│       ├── overview_desktop.png # Standard 100% desktop cartography view
-│       ├── zoomed_out_view.png  # 67% broad cartography view
-│       └── zoomed_in_view.png   # 125% focused state view
+│       ├── overview_desktop.png          # Distinct state colors and glowing river vectors
+│       ├── river_modal_details.png       # Detailed river heritage modal with metrics and basin
+│       ├── state_modal_with_rivers.png   # State modal with passing rivers lifelines
+│       └── regional_zones_view.png       # Regional zones dual-view mode
 │
 ├── audio/                       # 55 Complete Regional Folk Audio Tracks
 │   │

@@ -75,6 +75,7 @@
     <nav class="filter-bar" aria-label="Heritage Layer Filters">
       <div class="filter-categories" role="tablist">
         <button class="filter-pill active" data-filter="all" role="tab" aria-selected="true">🌟 All Traditions</button>
+        <button class="filter-pill" data-filter="rivers" role="tab" aria-selected="false">🌊 Sacred Rivers</button>
         <button class="filter-pill" data-filter="gi" role="tab" aria-selected="false">🏷️ GI-Tagged Products</button>
         <button class="filter-pill" data-filter="dance" role="tab" aria-selected="false">💃 Folk Dance & Arts</button>
         <button class="filter-pill" data-filter="monuments" role="tab" aria-selected="false">🏛️ Heritage Sites</button>
@@ -84,9 +85,9 @@
       <div class="stats-ticker">
         <span class="stat-item"><span class="stat-val">37</span> States & UTs</span>
         <span class="stat-item">•</span>
-        <span class="stat-item"><span class="stat-val">120+</span> GI Tags</span>
+        <span class="stat-item"><span class="stat-val">26</span> Sacred Rivers</span>
         <span class="stat-item">•</span>
-        <span class="stat-item"><span class="stat-val">5s</span> Audio Snippets</span>
+        <span class="stat-item"><span class="stat-val">120+</span> GI Tags</span>
       </div>
     </nav>
 
@@ -99,22 +100,31 @@
         <button id="resetMapBtn" class="floating-action-btn" title="Reset View to All India" aria-label="Reset Map View">
           🇮🇳
         </button>
+        <button id="toggleRiversBtn" class="floating-action-btn active" title="Toggle River Layer (ON/OFF)" aria-label="Toggle Rivers">
+          🌊
+        </button>
+        <button id="toggleColorModeBtn" class="floating-action-btn active" title="Switch between Distinct State Colors and Regional Zones" aria-label="Toggle Color Mode">
+          🎨
+        </button>
       </div>
 
       <!-- Map Legend -->
-      <div class="map-legend" role="complementary" aria-label="Geographical Zones Legend">
-        <div class="legend-title">
-          <span>Geographical Zones</span>
-          <span style="font-size: 11px;">🗺️</span>
+      <div class="map-legend" id="mapLegend" role="complementary" aria-label="Geographical Legend">
+        <div class="legend-header-row">
+          <span class="legend-title" id="legendTitle">Distinct State Hues</span>
+          <button id="legendModeSwitch" class="legend-toggle-link" title="Switch Legend Mode">Zones ⇄</button>
         </div>
-        <div class="legend-items">
-          <div class="legend-item"><span class="legend-color-dot dot-north"></span> North India</div>
-          <div class="legend-item"><span class="legend-color-dot dot-south"></span> South India</div>
-          <div class="legend-item"><span class="legend-color-dot dot-east"></span> East India</div>
-          <div class="legend-item"><span class="legend-color-dot dot-west"></span> West India</div>
-          <div class="legend-item"><span class="legend-color-dot dot-central"></span> Central India</div>
-          <div class="legend-item"><span class="legend-color-dot dot-northeast"></span> North-East India</div>
-          <div class="legend-item"><span class="legend-color-dot dot-ut"></span> Union Territories</div>
+        <div id="legendContent" class="legend-items">
+          <!-- Dynamic legend content populated by app.js -->
+        </div>
+        <div class="legend-river-section">
+          <div class="legend-subheading">🌊 Sacred River Systems</div>
+          <div class="legend-river-items">
+            <div class="legend-river-item"><span class="legend-river-dot river-himalayan"></span> Himalayan (Ganga, Yamuna, Brahmaputra)</div>
+            <div class="legend-river-item"><span class="legend-river-dot river-peninsular-east"></span> Peninsular East (Godavari, Krishna, Kaveri)</div>
+            <div class="legend-river-item"><span class="legend-river-dot river-peninsular-west"></span> Peninsular West (Narmada, Tapti, Sabarmati)</div>
+            <div class="legend-river-item"><span class="legend-river-dot river-indus"></span> Indus System (Indus, Sutlej, Chenab, Jhelum)</div>
+          </div>
         </div>
       </div>
     </main>
@@ -216,6 +226,12 @@
           <div id="cardSitesCloud" class="tags-cloud"></div>
         </div>
 
+        <!-- Major Rivers & Sacred Lifelines -->
+        <div id="cardRiversSection">
+          <h3 class="heritage-section-title">🌊 Sacred Rivers & Hydrological Lifelines</h3>
+          <div id="cardRiversCloud" class="tags-cloud"></div>
+        </div>
+
       </div>
 
       <!-- Card Footer Navigation -->
@@ -225,6 +241,66 @@
         <button id="nextStateBtn" class="nav-state-btn" aria-label="Next State">Next State →</button>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       River Heritage Detail Modal / Drawer Card
+       ======================================================================== -->
+  <div id="riverModal" class="heritage-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="riverCardName">
+    <div class="heritage-card river-card">
+      <div class="card-hero river-hero">
+        <div class="river-hero-gradient"></div>
+        <button id="riverCloseBtn" class="card-close-btn" title="Close River Details (Esc)" aria-label="Close River Modal">✕</button>
+        
+        <div class="card-hero-content">
+          <span id="riverSystemBadge" class="card-region-badge">🌊 River System</span>
+          <div class="card-title-row">
+            <h2 id="riverCardName" class="card-state-name">River Name</h2>
+            <span id="riverHindiName" class="card-capital-tag">Hindi Name</span>
+          </div>
+          <p id="riverSubtitle" class="card-tagline">"River Subtitle"</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Bar -->
+      <div class="river-metrics-bar">
+        <div class="river-metric-item">
+          <span class="river-metric-label">Length</span>
+          <span id="riverMetricLength" class="river-metric-val">2,525 km</span>
+        </div>
+        <div class="river-metric-item">
+          <span class="river-metric-label">Origin / Source</span>
+          <span id="riverMetricOrigin" class="river-metric-val">Gangotri Glacier</span>
+        </div>
+        <div class="river-metric-item">
+          <span class="river-metric-label">Outflow / Basin</span>
+          <span id="riverMetricBasin" class="river-metric-val">Bay of Bengal</span>
+        </div>
+      </div>
+
+      <!-- River Details Body -->
+      <div class="card-body">
+        <div>
+          <h3 class="heritage-section-title">📖 Sacred Legacy & Cultural Significance</h3>
+          <p id="riverSignificance" style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6;"></p>
+        </div>
+
+        <div>
+          <h3 class="heritage-section-title">🏛️ Historic Temples, Ghats & Sanctuaries Along the River</h3>
+          <p id="riverHeritageSites" style="font-size: 0.84rem; color: #7dd3fc; line-height: 1.5; font-weight: 500;"></p>
+        </div>
+
+        <div>
+          <h3 class="heritage-section-title">🗺️ States & Regions Traversed</h3>
+          <div id="riverStatesCloud" class="tags-cloud"></div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <span class="modal-attribution">Sacred Rivers of India • Geographical Heritage Map</span>
+        <button id="riverFocusBtn" class="header-btn btn-gold" style="height: 32px; padding: 0 14px; font-size: 0.8rem;">Highlight River Course 🌊</button>
+      </div>
     </div>
   </div>
 

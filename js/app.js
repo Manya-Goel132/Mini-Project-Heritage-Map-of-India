@@ -17,9 +17,15 @@
   'use strict';
 
   // State Management
+  // State Management
   let map = null;
   let geojsonLayer = null;
+  let riverLayer = null;
+  let riverGlowLayer = null;
+  let showRivers = true;
+  let colorMode = 'distinct'; // 'distinct' (every state has unique color) vs 'zones' (7 regional zones)
   let currentState = null;
+  let currentRiver = null;
   let activeFilter = 'all';
   let isSoundEnabled = true;
   let isForcedShortPlay = true; // Default: Forced 5-Second Short-Play (no file trimming needed)
@@ -28,7 +34,52 @@
   let progressInterval = null;
   const AUDIO_DURATION_SEC = 5.0;
 
-  // Zone Colors for Cartography
+  // River Data Storage
+  const riversDataList = [];
+  const riverDataMap = new Map();
+
+  // 1. Unique Distinct State Colors (Curated rich cultural heritage palette)
+  const stateColors = {
+    'rajasthan': '#e11d48',            // Royal Rajputana Crimson
+    'gujarat': '#f97316',              // Marigold Sunset Orange
+    'punjab': '#d97706',               // Golden Mustard Wheat
+    'haryana': '#16a34a',              // Agricultural Emerald
+    'himachal pradesh': '#059669',     // Himalayan Pine Green
+    'uttarakhand': '#0891b2',          // Glacial Alaknanda Turquoise
+    'jammu and kashmir': '#dc2626',    // Saffron Chinar Red
+    'ladakh': '#2563eb',               // High-Altitude Lapis Lazuli
+    'delhi': '#eab308',                // Imperial Capital Gold
+    'chandigarh': '#0d9488',           // Modernist City Teal
+    'uttar pradesh': '#c2410c',        // Heritage Terracotta Saffron
+    'bihar': '#b45309',                // Ancient Magadha Bronze
+    'madhya pradesh': '#7c3aed',       // Central Heartwood Amethyst
+    'chhattisgarh': '#047857',         // Bastar Tribal Forest Green
+    'maharashtra': '#6366f1',          // Shivaji Royal Maratha Indigo
+    'goa': '#0284c7',                  // Tropical Konkan Ocean Blue
+    'karnataka': '#d97706',            // Carnatic Sandalwood Amber
+    'kerala': '#15803d',               // God's Own Emerald Viridian
+    'tamil nadu': '#be123c',           // Dravidian Temple Ruby
+    'andhra pradesh': '#0f766e',       // Kuchipudi Peacock Teal
+    'telangana': '#9333ea',            // Kakatiya Royal Violet
+    'odisha': '#b91c1c',               // Jagannath Temple Ochre
+    'west bengal': '#4338ca',          // Shantiniketan Indigo
+    'jharkhand': '#15803d',            // Chota Nagpur Deep Sal Green
+    'sikkim': '#db2777',               // Kanchenjunga Orchid Pink
+    'assam': '#0d9488',                // Kaziranga Valley Teal Green
+    'arunachal pradesh': '#0284c7',    // Dawn-Lit Mountain Sky Blue
+    'meghalaya': '#06b6d4',            // Abode of Clouds Mist Cyan
+    'nagaland': '#e11d48',             // Hornbill Tribal Vermillion
+    'manipur': '#ec4899',              // Loktak Floating Lotus Pink
+    'mizoram': '#4f46e5',              // Blue Mountain Indigo
+    'tripura': '#d97706',              // Ujjayanta Palace Amber
+    'andaman and nicobar islands': '#06b6d4', // Coral Bay Cyan
+    'lakshadweep': '#14b8a6',          // Atoll Lagoon Aquamarine
+    'puducherry': '#f472b6',           // French Colony Pastel Rose
+    'dadra and nagar haveli': '#0284c7', // Daman Coastal Cerulean
+    'daman and diu': '#0e7490'          // Arabian Sea Shore Blue
+  };
+
+  // 2. Zone Colors for Cartography (Optional Mode)
   const zoneColors = {
     'North India': '#f59e0b',
     'South India': '#3b82f6',
@@ -50,6 +101,14 @@
   // DOM Elements
   const modalOverlay = document.getElementById('heritageModal');
   const aboutModal = document.getElementById('aboutModal');
+  const riverModal = document.getElementById('riverModal');
+  const riverCloseBtn = document.getElementById('riverCloseBtn');
+  const toggleRiversBtn = document.getElementById('toggleRiversBtn');
+  const toggleColorModeBtn = document.getElementById('toggleColorModeBtn');
+  const legendTitle = document.getElementById('legendTitle');
+  const legendContent = document.getElementById('legendContent');
+  const legendModeSwitch = document.getElementById('legendModeSwitch');
+  const riverFocusBtn = document.getElementById('riverFocusBtn');
   const searchInput = document.getElementById('searchInput');
   const searchDropdown = document.getElementById('searchDropdown');
   const audioPlayBtn = document.getElementById('audioPlayBtn');
@@ -75,7 +134,9 @@
     initMap();
     initControls();
     initQuickCarousel();
+    updateLegend();
     await loadGeoJSON();
+    await loadRiversGeoJSON();
     setTimeout(() => {
       if (map) map.invalidateSize();
       window.scrollTo(0, 0);
@@ -86,12 +147,14 @@
    * Initialize Leaflet Map
    */
   function initMap() {
-    // Centered on India
+    // Centered on India with smooth continuous fractional zoom
     map = L.map('map', {
       center: [22.8, 80.5],
       zoom: 4.8,
-      minZoom: 4,
+      minZoom: 3.5,
       maxZoom: 10,
+      zoomSnap: 0.2,
+      zoomDelta: 0.5,
       zoomControl: false,
       keyboard: false // Prevents Leaflet container focus from scrolling the viewport
     });
@@ -130,31 +193,95 @@
   }
 
   /**
-   * Style individual state polygon based on Zone & Heritage layer
+   * Load GeoJSON Rivers Data (data/india_rivers.geojson)
+   */
+  async function loadRiversGeoJSON() {
+    try {
+      const response = await fetch('data/india_rivers.geojson');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const riversGeoJSON = await response.json();
+
+      // Index rivers
+      riversGeoJSON.features.forEach(f => {
+        const props = f.properties;
+        riversDataList.push(props);
+        riverDataMap.set(props.id, { feature: f, props: props });
+      });
+
+      // 1. Subtle glowing ambient line under rivers
+      riverGlowLayer = L.geoJSON(riversGeoJSON, {
+        style: function (f) {
+          return {
+            color: f.properties.color || '#38bdf8',
+            weight: (f.properties.weight || 3) + 3.5,
+            opacity: 0.28,
+            className: 'river-glow-line'
+          };
+        }
+      }).addTo(map);
+
+      // 2. Interactive crisp river centerlines
+      riverLayer = L.geoJSON(riversGeoJSON, {
+        style: function (f) {
+          return {
+            color: f.properties.color || '#38bdf8',
+            weight: f.properties.weight || 3,
+            opacity: 0.95,
+            className: 'river-core-line'
+          };
+        },
+        onEachFeature: onEachRiverFeature
+      }).addTo(map);
+
+      // Bring rivers above polygons
+      if (riverGlowLayer) riverGlowLayer.bringToFront();
+      if (riverLayer) riverLayer.bringToFront();
+    } catch (err) {
+      console.error('Failed to load data/india_rivers.geojson:', err);
+    }
+  }
+
+  /**
+   * Style individual state polygon based on Color Mode & Heritage Layer
    */
   function styleFeature(feature) {
     const stateName = feature.properties.st_nm || feature.properties.NAME_1 || '';
-    const stateInfo = stateDataMap.get(stateName.toLowerCase().trim());
+    const stateKey = stateName.toLowerCase().trim();
+    const stateInfo = stateDataMap.get(stateKey);
     const zone = stateInfo ? stateInfo.zone : 'Union Territory';
-    const baseColor = zoneColors[zone] || '#d4af37';
 
-    let fillOpacity = 0.35;
-    let weight = 1.2;
-    let color = 'rgba(255, 255, 255, 0.4)';
+    // Pick color according to active colorMode: 'distinct' vs 'zones'
+    let baseColor = '#d4af37';
+    if (colorMode === 'distinct') {
+      baseColor = stateColors[stateKey] || zoneColors[zone] || '#d4af37';
+    } else {
+      baseColor = zoneColors[zone] || '#d4af37';
+    }
+
+    let fillOpacity = 0.38;
+    let weight = 1.3;
+    let color = 'rgba(255, 255, 255, 0.45)';
 
     // Layer-specific adjustments
-    if (activeFilter === 'gi') {
-      fillOpacity = stateInfo && stateInfo.giTags.length > 0 ? 0.45 : 0.15;
+    if (activeFilter === 'rivers') {
+      // Dim states down so glowing rivers take the visual spotlight
+      fillOpacity = 0.16;
+      weight = 0.9;
+      color = 'rgba(255, 255, 255, 0.25)';
+    } else if (activeFilter === 'gi') {
+      fillOpacity = stateInfo && stateInfo.giTags.length > 0 ? 0.50 : 0.12;
     } else if (activeFilter === 'dance') {
-      fillOpacity = stateInfo && stateInfo.folkDance ? 0.45 : 0.15;
+      fillOpacity = stateInfo && stateInfo.folkDance ? 0.50 : 0.12;
     } else if (activeFilter === 'music') {
-      fillOpacity = 0.45;
+      fillOpacity = 0.50;
     }
 
     return {
       fillColor: baseColor,
       weight: weight,
-      opacity: 0.8,
+      opacity: 0.85,
       color: color,
       fillOpacity: fillOpacity,
       dashArray: ''
@@ -321,6 +448,45 @@
       chip.innerHTML = `🏛️ ${s}`;
       sitesContainer.appendChild(chip);
     });
+
+    // Sacred Rivers Passing Through this State
+    const riversSection = document.getElementById('cardRiversSection');
+    const riversCloud = document.getElementById('cardRiversCloud');
+    if (riversSection && riversCloud) {
+      riversCloud.innerHTML = '';
+      const stateNameLower = state.name.toLowerCase().trim();
+      const passingRivers = riversDataList.filter(r => 
+        Array.isArray(r.states) && r.states.some(s => s.toLowerCase().trim() === stateNameLower)
+      );
+
+      // Deduplicate rivers by ID
+      const uniqueRivers = [];
+      const seenIds = new Set();
+      passingRivers.forEach(r => {
+        const key = r.id || r.name;
+        if (!seenIds.has(key)) {
+          seenIds.add(key);
+          uniqueRivers.push(r);
+        }
+      });
+
+      if (uniqueRivers.length > 0) {
+        riversSection.style.display = 'block';
+        uniqueRivers.forEach(r => {
+          const pill = document.createElement('button');
+          pill.className = 'river-pill';
+          pill.innerHTML = `🌊 ${r.name} (${r.length})`;
+          pill.title = `Explore ${r.name} River Basin`;
+          pill.addEventListener('click', () => {
+            closeModal();
+            openRiverModal(r);
+          });
+          riversCloud.appendChild(pill);
+        });
+      } else {
+        riversSection.style.display = 'none';
+      }
+    }
   }
 
   /**
@@ -482,6 +648,248 @@
   }
 
   /**
+   * Open River Details Modal Card
+   */
+  function openRiverModal(props, layer) {
+    currentRiver = props;
+    if (!props) return;
+
+    const nameEl = document.getElementById('riverCardName');
+    const hindiEl = document.getElementById('riverHindiName');
+    const subtitleEl = document.getElementById('riverSubtitle');
+    const systemEl = document.getElementById('riverSystemBadge');
+    const lengthEl = document.getElementById('riverMetricLength');
+    const originEl = document.getElementById('riverMetricOrigin');
+    const basinEl = document.getElementById('riverMetricBasin');
+    const significanceEl = document.getElementById('riverSignificance');
+    const heritageEl = document.getElementById('riverHeritageSites');
+    const statesCloud = document.getElementById('riverStatesCloud');
+
+    const cleanName = props.name.includes('River') ? props.name : `${props.name} River`;
+    const hindi = props.hindi_name || props.hindiName || '';
+    const subtitle = props.subtitle || `${props.system || 'Major River System'} of India`;
+    const significance = props.cultural_significance || props.significance || 'Sacred lifeline of Indian civilization and ecosystem.';
+    let heritage = props.heritage_sites || props.heritageSites || 'Sacred ghats, historic temples, and ancient pilgrimage routes.';
+    if (Array.isArray(heritage)) {
+      heritage = heritage.join(' • ');
+    }
+
+    if (nameEl) nameEl.textContent = cleanName;
+    if (hindiEl) hindiEl.textContent = hindi;
+    if (subtitleEl) subtitleEl.textContent = subtitle;
+    if (systemEl) systemEl.innerHTML = `🌊 ${props.system || 'Indian River System'}`;
+    if (lengthEl) lengthEl.textContent = props.length || '—';
+    if (originEl) originEl.textContent = props.origin || '—';
+    if (basinEl) basinEl.textContent = props.basin || '—';
+    if (significanceEl) significanceEl.textContent = significance;
+    if (heritageEl) heritageEl.textContent = heritage;
+
+    if (statesCloud) {
+      statesCloud.innerHTML = '';
+      if (Array.isArray(props.states)) {
+        props.states.forEach(stName => {
+          const chip = document.createElement('button');
+          chip.className = 'state-river-chip';
+          chip.innerHTML = `📍 ${stName}`;
+          chip.title = `Jump to ${stName} heritage details`;
+          chip.addEventListener('click', () => {
+            closeRiverModal();
+            const foundState = stateData.find(s => s.name.toLowerCase().trim() === stName.toLowerCase().trim());
+            if (foundState) {
+              selectState(foundState, null);
+            }
+          });
+          statesCloud.appendChild(chip);
+        });
+      }
+    }
+
+    if (riverModal) {
+      riverModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    focusRiverOnMap(props, layer);
+  }
+
+  function closeRiverModal() {
+    if (riverModal) {
+      riverModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function focusRiverOnMap(props, layer) {
+    if (layer && typeof layer.getBounds === 'function') {
+      map.fitBounds(layer.getBounds(), { padding: [60, 60], maxZoom: 8, animate: true, duration: 0.8 });
+      return;
+    }
+    if (riverLayer) {
+      riverLayer.eachLayer(l => {
+        if (l.feature && l.feature.properties && l.feature.properties.id === props.id) {
+          map.fitBounds(l.getBounds(), { padding: [60, 60], maxZoom: 8, animate: true, duration: 0.8 });
+        }
+      });
+    }
+  }
+
+  /**
+   * Interaction Handlers for River Centerlines
+   */
+  function onEachRiverFeature(feature, layer) {
+    const props = feature.properties;
+    const hindi = props.hindi_name || props.hindiName || '';
+    const tooltipContent = `
+      <div class="custom-river-tooltip">
+        <div class="river-tip-title">🌊 ${props.name} ${props.name.includes('River') ? '' : 'River'} ${hindi ? '(' + hindi + ')' : ''}</div>
+        <div class="river-tip-meta">${props.system} • Length: ${props.length}</div>
+        <div class="river-tip-origin">Source: ${props.origin}</div>
+        <div class="river-tip-action">Click to inspect basin, states & heritage ✦</div>
+      </div>
+    `;
+    layer.bindTooltip(tooltipContent, {
+      sticky: true,
+      direction: 'auto',
+      className: 'custom-leaflet-tooltip'
+    });
+
+    layer.on({
+      mouseover: function (e) {
+        const l = e.target;
+        l.setStyle({
+          weight: (props.weight || 3) + 2.5,
+          color: '#ffffff',
+          opacity: 1
+        });
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+          l.bringToFront();
+        }
+      },
+      mouseout: function (e) {
+        if (riverLayer) {
+          riverLayer.resetStyle(e.target);
+        }
+      },
+      click: function () {
+        openRiverModal(props, layer);
+      }
+    });
+  }
+
+  /**
+   * Toggle River Vectors Visibility
+   */
+  function toggleRivers() {
+    showRivers = !showRivers;
+    if (toggleRiversBtn) {
+      toggleRiversBtn.classList.toggle('active', showRivers);
+    }
+    if (showRivers) {
+      if (riverGlowLayer && !map.hasLayer(riverGlowLayer)) map.addLayer(riverGlowLayer);
+      if (riverLayer && !map.hasLayer(riverLayer)) map.addLayer(riverLayer);
+      if (riverGlowLayer) riverGlowLayer.bringToFront();
+      if (riverLayer) riverLayer.bringToFront();
+    } else {
+      if (riverGlowLayer && map.hasLayer(riverGlowLayer)) map.removeLayer(riverGlowLayer);
+      if (riverLayer && map.hasLayer(riverLayer)) map.removeLayer(riverLayer);
+    }
+  }
+
+  /**
+   * Toggle Color Mode: Distinct Vibrant State Hues vs 7 Regional Zones
+   */
+  function toggleColorMode() {
+    colorMode = colorMode === 'distinct' ? 'zones' : 'distinct';
+    if (toggleColorModeBtn) {
+      if (colorMode === 'distinct') {
+        toggleColorModeBtn.innerHTML = '🎨';
+        toggleColorModeBtn.title = 'Color Mode: Distinct Hues (Click to switch to Regional Zones)';
+        toggleColorModeBtn.classList.add('active');
+      } else {
+        toggleColorModeBtn.innerHTML = '🗺️';
+        toggleColorModeBtn.title = 'Color Mode: Regional Zones (Click to switch to Distinct Hues)';
+        toggleColorModeBtn.classList.remove('active');
+      }
+    }
+    if (geojsonLayer) {
+      geojsonLayer.eachLayer(l => geojsonLayer.resetStyle(l));
+    }
+    updateLegend();
+  }
+
+  /**
+   * Update Floating Map Legend
+   */
+  function updateLegend() {
+    if (!legendContent) return;
+    if (legendTitle) {
+      legendTitle.textContent = colorMode === 'distinct' ? 'Distinct Heritage Hues' : 'Regional Zones of India';
+    }
+    if (legendModeSwitch) {
+      legendModeSwitch.textContent = colorMode === 'distinct' ? 'Switch to Regional Zones' : 'Switch to Distinct Colors';
+    }
+
+    if (colorMode === 'zones') {
+      let html = '<div class="legend-items-grid">';
+      for (const [zone, color] of Object.entries(zoneColors)) {
+        html += `
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: ${color};"></span>
+            <span class="legend-label">${zone}</span>
+          </div>
+        `;
+      }
+      html += '</div>';
+      html += `
+        <div class="legend-river-section">
+          <div class="legend-subheading">Major River Basins</div>
+          <div class="legend-items-grid">
+            <div class="legend-item"><span class="legend-color-dot" style="background: #38bdf8;"></span><span class="legend-label">Himalayan (Ganga, Indus, Brahmaputra)</span></div>
+            <div class="legend-item"><span class="legend-color-dot" style="background: #0284c7;"></span><span class="legend-label">Peninsular (Godavari, Krishna, Kaveri)</span></div>
+            <div class="legend-item"><span class="legend-color-dot" style="background: #0d9488;"></span><span class="legend-label">West-Flowing (Narmada, Tapti)</span></div>
+          </div>
+        </div>
+      `;
+      legendContent.innerHTML = html;
+    } else {
+      let html = '<div class="legend-items-grid">';
+      const sampleStates = [
+        ['Rajasthan', '#e11d48'],
+        ['Gujarat', '#f97316'],
+        ['Punjab', '#d97706'],
+        ['Uttar Pradesh', '#c2410c'],
+        ['Maharashtra', '#6366f1'],
+        ['Karnataka', '#d97706'],
+        ['Kerala', '#15803d'],
+        ['Tamil Nadu', '#be123c'],
+        ['West Bengal', '#4338ca'],
+        ['Assam', '#0d9488'],
+        ['Kashmir & Ladakh', '#2563eb'],
+        ['Madhya Pradesh', '#7c3aed']
+      ];
+      sampleStates.forEach(([st, col]) => {
+        html += `
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: ${col};"></span>
+            <span class="legend-label">${st}</span>
+          </div>
+        `;
+      });
+      html += '</div>';
+      html += `
+        <div class="legend-river-section">
+          <div class="legend-subheading">🌊 River Systems (${riversDataList.length || 35}+ Lifelines)</div>
+          <div class="legend-items-grid">
+            <div class="legend-item"><span class="legend-color-dot" style="background: #38bdf8;"></span><span class="legend-label">Perennial Glacial Rivers</span></div>
+            <div class="legend-item"><span class="legend-color-dot" style="background: #0284c7;"></span><span class="legend-label">Peninsular Sacred Basins</span></div>
+          </div>
+        </div>
+      `;
+      legendContent.innerHTML = html;
+    }
+  }
+
+  /**
    * Navigate Previous / Next State
    */
   function navigateState(direction) {
@@ -506,10 +914,41 @@
       if (e.target === modalOverlay) closeModal();
     });
 
+    // River Modal Controls
+    if (riverCloseBtn) {
+      riverCloseBtn.addEventListener('click', closeRiverModal);
+    }
+    if (riverModal) {
+      riverModal.addEventListener('click', (e) => {
+        if (e.target === riverModal) closeRiverModal();
+      });
+    }
+    if (riverFocusBtn) {
+      riverFocusBtn.addEventListener('click', () => {
+        if (currentRiver) {
+          focusRiverOnMap(currentRiver);
+        }
+      });
+    }
+
+    // River Toggle Overlay Button
+    if (toggleRiversBtn) {
+      toggleRiversBtn.addEventListener('click', toggleRivers);
+    }
+
+    // Color Mode Toggle Button & Legend Switch Link
+    if (toggleColorModeBtn) {
+      toggleColorModeBtn.addEventListener('click', toggleColorMode);
+    }
+    if (legendModeSwitch) {
+      legendModeSwitch.addEventListener('click', toggleColorMode);
+    }
+
     // Keyboard Shortcuts (Esc to close, Left/Right for state navigation)
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeModal();
+        closeRiverModal();
         aboutModal.classList.remove('open');
       } else if (modalOverlay.classList.contains('open')) {
         if (e.key === 'ArrowRight') navigateState(1);
@@ -576,13 +1015,21 @@
       if (e.target === aboutModal) aboutModal.classList.remove('open');
     });
 
-    // Filter Layers (All, GI Tags, Folk Dance, Monuments, Music)
+    // Filter Layers (All, GI Tags, Folk Dance, Monuments, Music, Rivers)
     const filterPills = document.querySelectorAll('.filter-pill');
     filterPills.forEach(pill => {
       pill.addEventListener('click', () => {
         filterPills.forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
         activeFilter = pill.getAttribute('data-filter');
+
+        // If Rivers pill is selected, ensure rivers are turned ON and brought to front
+        if (activeFilter === 'rivers') {
+          if (!showRivers) toggleRivers();
+          if (riverGlowLayer) riverGlowLayer.bringToFront();
+          if (riverLayer) riverLayer.bringToFront();
+        }
+
         if (geojsonLayer) {
           geojsonLayer.eachLayer(l => geojsonLayer.resetStyle(l));
         }
@@ -599,7 +1046,7 @@
   }
 
   /**
-   * Search Input Handler with Autocomplete Suggestions
+   * Search Input Handler with Joint State & River Suggestions
    */
   function handleSearchInput(e) {
     const query = e.target.value.toLowerCase().trim();
@@ -608,7 +1055,7 @@
       return;
     }
 
-    const matches = stateData.filter(state => {
+    const stateMatches = stateData.filter(state => {
       const matchName = state.name.toLowerCase().includes(query);
       const matchCapital = state.capital.toLowerCase().includes(query);
       const matchGi = state.giTags.some(g => g.name.toLowerCase().includes(query));
@@ -616,14 +1063,43 @@
       return matchName || matchCapital || matchGi || matchDance;
     });
 
-    if (matches.length === 0) {
-      searchDropdown.innerHTML = '<div style="padding: 12px 16px; font-size: 0.8rem; color: #94a3b8;">No matching heritage states found.</div>';
+    const riverMatches = riversDataList.filter(river => {
+      const matchName = river.name.toLowerCase().includes(query);
+      const matchHindi = river.hindiName && river.hindiName.toLowerCase().includes(query);
+      const matchSystem = river.system && river.system.toLowerCase().includes(query);
+      const matchState = Array.isArray(river.states) && river.states.some(s => s.toLowerCase().includes(query));
+      return matchName || matchHindi || matchSystem || matchState;
+    });
+
+    if (stateMatches.length === 0 && riverMatches.length === 0) {
+      searchDropdown.innerHTML = '<div style="padding: 12px 16px; font-size: 0.8rem; color: #94a3b8;">No matching heritage states or rivers found.</div>';
       searchDropdown.classList.add('show');
       return;
     }
 
     searchDropdown.innerHTML = '';
-    matches.slice(0, 6).forEach(state => {
+
+    // Render River Matches with distinctive blue badge
+    riverMatches.slice(0, 3).forEach(river => {
+      const item = document.createElement('div');
+      item.className = 'search-item';
+      item.innerHTML = `
+        <div class="search-item-info">
+          <span class="search-item-name">🌊 ${river.name} River ${river.hindiName ? '(' + river.hindiName + ')' : ''}</span>
+          <span class="search-item-meta">${river.system} • Length: ${river.length}</span>
+        </div>
+        <span class="search-item-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">River System</span>
+      `;
+      item.addEventListener('click', () => {
+        searchInput.value = river.name;
+        searchDropdown.classList.remove('show');
+        openRiverModal(river);
+      });
+      searchDropdown.appendChild(item);
+    });
+
+    // Render State Matches
+    stateMatches.slice(0, 5).forEach(state => {
       const item = document.createElement('div');
       item.className = 'search-item';
       item.innerHTML = `
