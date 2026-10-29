@@ -1469,4 +1469,400 @@ body::before {
   .tech-stack-list {
     grid-template-columns: 1fr;
   }
+
+  .compare-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-selectors-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quiz-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   State Drawer Tabs System
+   -------------------------------------------------------------------------- */
+.state-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 24px;
+  background: rgba(10, 14, 23, 0.96);
+  border-bottom: 1px solid var(--border-glass);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.state-tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.state-tab-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.state-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.state-tab-btn.active {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(255, 140, 0, 0.2));
+  color: #ffd866;
+  border-color: var(--border-gold);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.state-tab-pane {
+  display: none;
+  animation: fadeInPane 0.25s ease-out;
+}
+
+.state-tab-pane.active {
+  display: block;
+}
+
+@keyframes fadeInPane {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* State Meta Highlights Grid */
+.state-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+}
+
+.state-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.state-meta-key {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.state-meta-val {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-top: 2px;
+}
+
+/* Festivals & Cuisines Grids */
+.festivals-grid,
+.cuisine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.festival-card,
+.cuisine-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  transition: var(--transition);
+}
+
+.festival-card:hover,
+.cuisine-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(212, 175, 55, 0.35);
+  transform: translateY(-2px);
+}
+
+.festival-name,
+.cuisine-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #ffd866;
+  margin-bottom: 4px;
+}
+
+.festival-desc,
+.cuisine-desc {
+  font-size: 0.76rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.attire-box {
+  border-left: 3px solid #ec4899;
+}
+
+.geo-details-box {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   Comparison Modal
+   -------------------------------------------------------------------------- */
+.compare-card {
+  max-width: 960px;
+  height: 88vh;
+}
+
+.compare-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border-glass);
+  position: relative;
+}
+
+.compare-selectors-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 24px;
+  background: rgba(10, 14, 23, 0.85);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.compare-selector-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.compare-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffd866;
+  white-space: nowrap;
+}
+
+.compare-dropdown {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border-gold);
+  color: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.compare-dropdown option {
+  background: #0e1421;
+  color: #fff;
+}
+
+.compare-vs-badge {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #ffd866;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.compare-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.compare-col {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.compare-hero-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.compare-state-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: #ffd866;
+}
+
+.compare-section-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: #38bdf8;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+
+.compare-section-content {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   Heritage Trivia Quiz Modal
+   -------------------------------------------------------------------------- */
+.quiz-card {
+  max-width: 680px;
+}
+
+.quiz-header {
+  padding: 20px 24px 14px;
+  border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.quiz-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: #ffd866;
+  margin-top: 4px;
+}
+
+.quiz-stats-hud {
+  display: flex;
+  gap: 8px;
+}
+
+.quiz-hud-pill {
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  font-size: 0.74rem;
+  color: #cbd5e1;
+}
+
+.quiz-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.quiz-question-box {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.quiz-question-text {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #f8fafc;
+  line-height: 1.5;
+}
+
+.quiz-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.quiz-option-btn {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  color: #e2e8f0;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transition);
+}
+
+.quiz-option-btn:hover:not(:disabled) {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #ffd866;
+  color: #ffd866;
+  transform: translateY(-1px);
+}
+
+.quiz-option-btn.correct {
+  background: rgba(34, 197, 94, 0.25) !important;
+  border-color: #22c55e !important;
+  color: #86efac !important;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+}
+
+.quiz-option-btn.incorrect {
+  background: rgba(239, 68, 68, 0.25) !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+.quiz-feedback-box {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  animation: fadeInPane 0.3s ease;
+}
+
+.quiz-feedback-status {
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-bottom: 4px;
+}
+
+.quiz-feedback-explanation {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.quiz-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }

@@ -59,10 +59,16 @@
 
       <!-- Action Buttons -->
       <div class="header-actions">
+        <button id="compareBtn" class="header-btn" title="Compare Two Indian States Side-by-Side" aria-label="Compare States">
+          ⚖️ Compare
+        </button>
+        <button id="quizBtn" class="header-btn btn-gold" title="Test Your Indian Heritage Knowledge" aria-label="Heritage Quiz">
+          🎯 Quiz
+        </button>
         <button id="soundToggleBtn" class="header-btn" title="Toggle Soundscape Autoplay" aria-label="Toggle Sound">
           🔊 Sound On
         </button>
-        <button id="randomStateBtn" class="header-btn btn-gold" title="Explore a Random State" aria-label="Explore Random State">
+        <button id="randomStateBtn" class="header-btn" title="Explore a Random State" aria-label="Explore Random State">
           🎲 Explore
         </button>
         <button id="aboutBtn" class="header-btn" title="View Project Information & Tech Stack" aria-label="About Project">
@@ -105,6 +111,9 @@
         </button>
         <button id="toggleColorModeBtn" class="floating-action-btn active" title="Switch between Distinct State Colors and Regional Zones" aria-label="Toggle Color Mode">
           🎨
+        </button>
+        <button id="toggleBasemapBtn" class="floating-action-btn" title="Switch Basemap Style (Midnight Dark / Satellite Topography / Warm Terrain)" aria-label="Toggle Basemap">
+          🛰️
         </button>
       </div>
 
@@ -193,43 +202,95 @@
         </div>
       </div>
 
-      <!-- Card Body: Cultural Heritage Data -->
+      <!-- State Drawer Navigation Tabs -->
+      <div class="state-tabs-bar" role="tablist" aria-label="State Heritage Sections">
+        <button class="state-tab-btn active" data-tab="tabOverview" role="tab" aria-selected="true">📖 Overview</button>
+        <button class="state-tab-btn" data-tab="tabGiCrafts" role="tab" aria-selected="false">🏷️ GI & Crafts</button>
+        <button class="state-tab-btn" data-tab="tabDanceFestivals" role="tab" aria-selected="false">💃 Dance & Festivals</button>
+        <button class="state-tab-btn" data-tab="tabCuisineAttire" role="tab" aria-selected="false">🍲 Cuisine & Attire</button>
+        <button class="state-tab-btn" data-tab="tabRiversGeo" role="tab" aria-selected="false">🌊 Rivers & Geography</button>
+      </div>
+
+      <!-- Card Body: Cultural Heritage Data Tabs -->
       <div class="card-body">
         
-        <!-- Cultural Summary Narrative -->
-        <div>
-          <h3 class="heritage-section-title">📖 Cultural Legacy & Narrative</h3>
-          <p id="cardSummary" style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6;"></p>
+        <!-- Tab 1: Overview & Legacy -->
+        <div id="tabOverview" class="state-tab-pane active" role="tabpanel">
+          <div>
+            <h3 class="heritage-section-title">📖 Cultural Legacy & Narrative</h3>
+            <p id="cardSummary" style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.6;"></p>
+          </div>
+
+          <!-- Key Cultural Metadata Highlights -->
+          <div class="state-meta-grid">
+            <div class="state-meta-item">
+              <span class="state-meta-key">Capital City</span>
+              <span id="statCapital" class="state-meta-val">—</span>
+            </div>
+            <div class="state-meta-item">
+              <span class="state-meta-key">Spoken Languages</span>
+              <span id="statLanguages" class="state-meta-val">—</span>
+            </div>
+            <div class="state-meta-item">
+              <span class="state-meta-key">Heritage Instruments</span>
+              <span id="statInstruments" class="state-meta-val">—</span>
+            </div>
+          </div>
+
+          <!-- Historic Monuments & UNESCO Heritage -->
+          <div style="margin-top: 18px;">
+            <h3 class="heritage-section-title">🏛️ Historic Monuments & Architecture</h3>
+            <div id="cardSitesCloud" class="tags-cloud"></div>
+          </div>
         </div>
 
-        <!-- GI Tagged Products (Slide 3 & Abstract) -->
-        <div>
-          <h3 class="heritage-section-title">🏷️ Geographical Indication (GI) Tagged Products</h3>
-          <div id="cardGiGrid" class="heritage-grid"></div>
+        <!-- Tab 2: GI Tags & Indigenous Crafts -->
+        <div id="tabGiCrafts" class="state-tab-pane" role="tabpanel">
+          <div>
+            <h3 class="heritage-section-title">🏷️ Geographical Indication (GI) Tagged Products</h3>
+            <div id="cardGiGrid" class="heritage-grid"></div>
+          </div>
+          <div style="margin-top: 18px;">
+            <h3 class="heritage-section-title">🎨 Indigenous Crafts & Artforms</h3>
+            <div id="cardCraftsCloud" class="tags-cloud"></div>
+          </div>
         </div>
 
-        <!-- Folk Dance & Performing Arts (e.g. Chhau Dance in Abstract) -->
-        <div>
-          <h3 class="heritage-section-title">💃 Traditional Folk Dance & Performing Arts</h3>
-          <div id="cardDanceBox" class="spotlight-box"></div>
+        <!-- Tab 3: Folk Dance & Cultural Festivals -->
+        <div id="tabDanceFestivals" class="state-tab-pane" role="tabpanel">
+          <div>
+            <h3 class="heritage-section-title">💃 Traditional Folk Dance & Performing Arts</h3>
+            <div id="cardDanceBox" class="spotlight-box"></div>
+          </div>
+          <div style="margin-top: 18px;">
+            <h3 class="heritage-section-title">🎉 Major Cultural Festivals & Celebrations</h3>
+            <div id="cardFestivalsGrid" class="festivals-grid"></div>
+          </div>
         </div>
 
-        <!-- Indigenous Crafts -->
-        <div>
-          <h3 class="heritage-section-title">🎨 Indigenous Crafts & Artforms</h3>
-          <div id="cardCraftsCloud" class="tags-cloud"></div>
+        <!-- Tab 4: Traditional Cuisine & Heritage Attire -->
+        <div id="tabCuisineAttire" class="state-tab-pane" role="tabpanel">
+          <div>
+            <h3 class="heritage-section-title">🍲 Iconic Traditional Cuisines & Delicacies</h3>
+            <div id="cardCuisineGrid" class="cuisine-grid"></div>
+          </div>
+          <div style="margin-top: 18px;">
+            <h3 class="heritage-section-title">👘 Traditional Attire & Handloom Textiles</h3>
+            <div id="cardAttireBox" class="spotlight-box attire-box"></div>
+          </div>
         </div>
 
-        <!-- Historic Monuments & UNESCO Heritage -->
-        <div>
-          <h3 class="heritage-section-title">🏛️ Historic Monuments & Architecture</h3>
-          <div id="cardSitesCloud" class="tags-cloud"></div>
-        </div>
-
-        <!-- Major Rivers & Sacred Lifelines -->
-        <div id="cardRiversSection">
-          <h3 class="heritage-section-title">🌊 Sacred Rivers & Hydrological Lifelines</h3>
-          <div id="cardRiversCloud" class="tags-cloud"></div>
+        <!-- Tab 5: Sacred Rivers & Geographical Identity -->
+        <div id="tabRiversGeo" class="state-tab-pane" role="tabpanel">
+          <div id="cardRiversSection">
+            <h3 class="heritage-section-title">🌊 Sacred Rivers & Hydrological Lifelines</h3>
+            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 8px;">Click any river pill below to inspect its source, basin, length, and cultural significance:</p>
+            <div id="cardRiversCloud" class="tags-cloud"></div>
+          </div>
+          <div style="margin-top: 18px;">
+            <h3 class="heritage-section-title">🗺️ Geographic & Regional Identity</h3>
+            <div id="cardGeoDetails" class="geo-details-box"></div>
+          </div>
         </div>
 
       </div>
@@ -378,6 +439,85 @@
             • <code>const stateData = [...]</code>: Houses rich cultural datasets per state (GI tags, folk arts, soundscape paths).
           </p>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       State Comparison Modal (Side-by-Side Dual Cultural Comparison)
+       ======================================================================== -->
+  <div id="compareModal" class="heritage-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="compareTitle">
+    <div class="heritage-card compare-card">
+      <div class="compare-header">
+        <button id="compareCloseBtn" class="card-close-btn" title="Close Comparison (Esc)" aria-label="Close Comparison">✕</button>
+        <h2 id="compareTitle" class="about-title">⚖️ Compare Indian States & UTs</h2>
+        <p class="about-subtitle">Explore regional traditions, folk arts, GI products, cuisines & music side-by-side</p>
+      </div>
+
+      <div class="compare-selectors-bar">
+        <div class="compare-selector-box">
+          <label for="compareSelectA" class="compare-label">State / UT A:</label>
+          <select id="compareSelectA" class="compare-dropdown" aria-label="Select First State"></select>
+        </div>
+        <div class="compare-vs-badge">VS</div>
+        <div class="compare-selector-box">
+          <label for="compareSelectB" class="compare-label">State / UT B:</label>
+          <select id="compareSelectB" class="compare-dropdown" aria-label="Select Second State"></select>
+        </div>
+      </div>
+
+      <div class="compare-body">
+        <div class="compare-grid">
+          <!-- Column A -->
+          <div id="compareColA" class="compare-col"></div>
+          <!-- Column B -->
+          <div id="compareColB" class="compare-col"></div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <span class="modal-attribution">Comparative Cultural Synthesis • Geographical Heritage Map of India</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Heritage Trivia & Quiz Challenge Modal
+       ======================================================================== -->
+  <div id="quizModal" class="heritage-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+    <div class="heritage-card quiz-card">
+      <div class="quiz-header">
+        <button id="quizCloseBtn" class="card-close-btn" title="Close Quiz (Esc)" aria-label="Close Quiz">✕</button>
+        <div class="quiz-header-meta">
+          <span class="card-region-badge">🎯 Heritage Trivia</span>
+          <h2 id="quizTitle" class="quiz-title">Indian Heritage Challenge</h2>
+        </div>
+        <div class="quiz-stats-hud">
+          <div class="quiz-hud-pill">Score: <strong id="quizScoreVal">0</strong></div>
+          <div class="quiz-hud-pill">Streak: <strong id="quizStreakVal">🔥 0</strong></div>
+          <div class="quiz-hud-pill">Question: <strong id="quizCounterVal">1 / 10</strong></div>
+        </div>
+      </div>
+
+      <div class="quiz-body">
+        <div class="quiz-question-box">
+          <p id="quizQuestionText" class="quiz-question-text">Loading question...</p>
+        </div>
+
+        <div id="quizOptionsGrid" class="quiz-options-grid"></div>
+
+        <div id="quizFeedbackBox" class="quiz-feedback-box" style="display: none;">
+          <div id="quizFeedbackStatus" class="quiz-feedback-status"></div>
+          <p id="quizFeedbackExplanation" class="quiz-feedback-explanation"></p>
+          <div class="quiz-actions-row">
+            <button id="quizFlyMapBtn" class="header-btn btn-gold" style="height: 34px; padding: 0 14px; font-size: 0.8rem;">📍 Fly to State on Map</button>
+            <button id="quizNextBtn" class="nav-state-btn" style="height: 34px; padding: 0 16px; font-size: 0.82rem;">Next Question →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <span class="modal-attribution">Gamified Heritage Learning • Problem Statement 26197</span>
       </div>
     </div>
   </div>

@@ -102,9 +102,16 @@
   const modalOverlay = document.getElementById('heritageModal');
   const aboutModal = document.getElementById('aboutModal');
   const riverModal = document.getElementById('riverModal');
+  const compareModal = document.getElementById('compareModal');
+  const quizModal = document.getElementById('quizModal');
   const riverCloseBtn = document.getElementById('riverCloseBtn');
+  const compareCloseBtn = document.getElementById('compareCloseBtn');
+  const quizCloseBtn = document.getElementById('quizCloseBtn');
+  const compareBtn = document.getElementById('compareBtn');
+  const quizBtn = document.getElementById('quizBtn');
   const toggleRiversBtn = document.getElementById('toggleRiversBtn');
   const toggleColorModeBtn = document.getElementById('toggleColorModeBtn');
+  const toggleBasemapBtn = document.getElementById('toggleBasemapBtn');
   const legendTitle = document.getElementById('legendTitle');
   const legendContent = document.getElementById('legendContent');
   const legendModeSwitch = document.getElementById('legendModeSwitch');
@@ -126,6 +133,49 @@
   const nextBtn = document.getElementById('nextStateBtn');
   const quickCarousel = document.getElementById('quickCarousel');
 
+  // Compare & Quiz Element References
+  const compareSelectA = document.getElementById('compareSelectA');
+  const compareSelectB = document.getElementById('compareSelectB');
+  const compareColA = document.getElementById('compareColA');
+  const compareColB = document.getElementById('compareColB');
+  const quizScoreVal = document.getElementById('quizScoreVal');
+  const quizStreakVal = document.getElementById('quizStreakVal');
+  const quizCounterVal = document.getElementById('quizCounterVal');
+  const quizQuestionText = document.getElementById('quizQuestionText');
+  const quizOptionsGrid = document.getElementById('quizOptionsGrid');
+  const quizFeedbackBox = document.getElementById('quizFeedbackBox');
+  const quizFeedbackStatus = document.getElementById('quizFeedbackStatus');
+  const quizFeedbackExplanation = document.getElementById('quizFeedbackExplanation');
+  const quizFlyMapBtn = document.getElementById('quizFlyMapBtn');
+  const quizNextBtn = document.getElementById('quizNextBtn');
+
+  // Basemap Switcher Configuration
+  let currentBasemapIndex = 0;
+  let currentTileLayer = null;
+  const basemapLayers = [
+    {
+      name: 'Midnight Dark',
+      icon: '🛰️',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+      attr: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+      maxZoom: 16
+    },
+    {
+      name: 'Satellite Topography',
+      icon: '📜',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      attr: 'Source: Esri, Maxar, Earthstar Geographics',
+      maxZoom: 18
+    },
+    {
+      name: 'Warm Heritage Terrain',
+      icon: '🌙',
+      url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      attr: '&copy; <a href="https://carto.com/">CARTO</a>',
+      maxZoom: 19
+    }
+  ];
+
   /**
    * Initialize Application
    */
@@ -134,6 +184,8 @@
     initMap();
     initControls();
     initQuickCarousel();
+    initComparisonEngine();
+    initQuizEngine();
     updateLegend();
     await loadGeoJSON();
     await loadRiversGeoJSON();
@@ -162,11 +214,37 @@
     // Custom Zoom Control top-right
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    // Free high-contrast Dark Canvas basemap (Zero API Key required, no watermarks)
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-      maxZoom: 16
+    // Initial default Basemap (Midnight Dark)
+    const initialBasemap = basemapLayers[0];
+    currentTileLayer = L.tileLayer(initialBasemap.url, {
+      attribution: initialBasemap.attr,
+      maxZoom: initialBasemap.maxZoom
     }).addTo(map);
+  }
+
+  /**
+   * Toggle Basemap Styles (Midnight Dark ⇄ Satellite ⇄ Warm Terrain)
+   */
+  function toggleBasemap() {
+    currentBasemapIndex = (currentBasemapIndex + 1) % basemapLayers.length;
+    const bm = basemapLayers[currentBasemapIndex];
+    if (currentTileLayer && map.hasLayer(currentTileLayer)) {
+      map.removeLayer(currentTileLayer);
+    }
+    currentTileLayer = L.tileLayer(bm.url, {
+      attribution: bm.attr,
+      maxZoom: bm.maxZoom
+    }).addTo(map);
+
+    // Keep vector polygon & river centerlines above basemap
+    if (geojsonLayer) geojsonLayer.bringToFront();
+    if (riverGlowLayer) riverGlowLayer.bringToFront();
+    if (riverLayer) riverLayer.bringToFront();
+
+    if (toggleBasemapBtn) {
+      toggleBasemapBtn.innerHTML = bm.icon;
+      toggleBasemapBtn.title = `Current Basemap: ${bm.name} (Click to switch)`;
+    }
   }
 
   /**
@@ -390,6 +468,14 @@
     document.getElementById('cardCapital').textContent = `Capital: ${state.capital}`;
     document.getElementById('cardTagline').textContent = `"${state.tagline}"`;
 
+    // Reset tabs to Overview tab by default
+    document.querySelectorAll('.state-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.state-tab-pane').forEach(p => p.classList.remove('active'));
+    const defaultTabBtn = document.querySelector('.state-tab-btn[data-tab="tabOverview"]');
+    const defaultPane = document.getElementById('tabOverview');
+    if (defaultTabBtn) defaultTabBtn.classList.add('active');
+    if (defaultPane) defaultPane.classList.add('active');
+
     // Audio metadata & Source Badge
     document.getElementById('cardInstruments').textContent = `Traditional Instruments: ${state.instruments}`;
     if (state.isAuthenticLive && audioSourceBadge) {
@@ -403,10 +489,26 @@
       audioStatusText.textContent = isForcedShortPlay ? '🎵 5-Second Traditional Soundscape' : '🎵 Full Audio Soundscape';
     }
 
-    // Summary Narrative
+    // Tab 1: Overview & Fact Meta
     document.getElementById('cardSummary').textContent = state.culturalSummary;
+    const statCap = document.getElementById('statCapital');
+    const statLang = document.getElementById('statLanguages');
+    const statInst = document.getElementById('statInstruments');
+    if (statCap) statCap.textContent = state.capital;
+    if (statLang) statLang.textContent = state.languages || 'Regional & Official';
+    if (statInst) statInst.textContent = state.instruments;
 
-    // GI-Tagged Products (e.g. Kanjeevaram silk in Tamil Nadu, Darjeeling Tea, etc.)
+    // Heritage Sites & Architecture
+    const sitesContainer = document.getElementById('cardSitesCloud');
+    sitesContainer.innerHTML = '';
+    state.heritageSites.forEach(s => {
+      const chip = document.createElement('span');
+      chip.className = 'tag-chip monument';
+      chip.innerHTML = `🏛️ ${s}`;
+      sitesContainer.appendChild(chip);
+    });
+
+    // Tab 2: GI Tags & Indigenous Crafts
     const giContainer = document.getElementById('cardGiGrid');
     giContainer.innerHTML = '';
     state.giTags.forEach(gi => {
@@ -422,14 +524,6 @@
       giContainer.appendChild(card);
     });
 
-    // Folk Dance & Performing Arts (e.g. Chhau Dance, Kathakali, Garba, Bhangra)
-    const danceContainer = document.getElementById('cardDanceBox');
-    danceContainer.innerHTML = `
-      <div class="spotlight-title">💃 ${state.folkDance.name}</div>
-      <p class="spotlight-desc">${state.folkDance.desc}</p>
-    `;
-
-    // Traditional Crafts
     const craftsContainer = document.getElementById('cardCraftsCloud');
     craftsContainer.innerHTML = '';
     state.crafts.forEach(c => {
@@ -439,17 +533,55 @@
       craftsContainer.appendChild(chip);
     });
 
-    // Heritage Sites & Architecture
-    const sitesContainer = document.getElementById('cardSitesCloud');
-    sitesContainer.innerHTML = '';
-    state.heritageSites.forEach(s => {
-      const chip = document.createElement('span');
-      chip.className = 'tag-chip monument';
-      chip.innerHTML = `🏛️ ${s}`;
-      sitesContainer.appendChild(chip);
-    });
+    // Tab 3: Folk Dance & Cultural Festivals
+    const danceContainer = document.getElementById('cardDanceBox');
+    danceContainer.innerHTML = `
+      <div class="spotlight-title">💃 ${state.folkDance.name}</div>
+      <p class="spotlight-desc">${state.folkDance.desc}</p>
+    `;
 
-    // Sacred Rivers Passing Through this State
+    const festivalsGrid = document.getElementById('cardFestivalsGrid');
+    if (festivalsGrid) {
+      festivalsGrid.innerHTML = '';
+      if (Array.isArray(state.festivals)) {
+        state.festivals.forEach(fest => {
+          const card = document.createElement('div');
+          card.className = 'festival-card';
+          card.innerHTML = `
+            <div class="festival-name">🎉 ${fest}</div>
+            <div class="festival-desc">Cherished regional festival celebrated with traditional music, folk rites, and community feasts.</div>
+          `;
+          festivalsGrid.appendChild(card);
+        });
+      }
+    }
+
+    // Tab 4: Traditional Cuisine & Heritage Attire
+    const cuisineGrid = document.getElementById('cardCuisineGrid');
+    if (cuisineGrid) {
+      cuisineGrid.innerHTML = '';
+      if (Array.isArray(state.cuisine)) {
+        state.cuisine.forEach(dish => {
+          const card = document.createElement('div');
+          card.className = 'cuisine-card';
+          card.innerHTML = `
+            <div class="cuisine-name">🍲 ${dish}</div>
+            <div class="cuisine-desc">Iconic traditional recipe prepared with indigenous herbs, seasonal grains, and generational culinary mastery.</div>
+          `;
+          cuisineGrid.appendChild(card);
+        });
+      }
+    }
+
+    const attireBox = document.getElementById('cardAttireBox');
+    if (attireBox) {
+      attireBox.innerHTML = `
+        <div class="spotlight-title">👘 Traditional Attire & Handlooms</div>
+        <p class="spotlight-desc">${state.attire || 'Distinguished traditional handlooms, woven sarees, turbans, and ceremonial garments.'}</p>
+      `;
+    }
+
+    // Tab 5: Sacred Rivers & Geographical Identity
     const riversSection = document.getElementById('cardRiversSection');
     const riversCloud = document.getElementById('cardRiversCloud');
     if (riversSection && riversCloud) {
@@ -486,6 +618,15 @@
       } else {
         riversSection.style.display = 'none';
       }
+    }
+
+    const geoBox = document.getElementById('cardGeoDetails');
+    if (geoBox) {
+      geoBox.innerHTML = `
+        <p><strong>Geographical Zone:</strong> ${state.zone}</p>
+        <p style="margin-top: 6px;"><strong>Administrative Capital:</strong> ${state.capital}</p>
+        <p style="margin-top: 6px; color: #ffd866;"><em>"${state.tagline}"</em></p>
+      `;
     }
   }
 
@@ -914,6 +1055,18 @@
       if (e.target === modalOverlay) closeModal();
     });
 
+    // State Drawer Tab Navigation Switching
+    document.querySelectorAll('.state-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.getAttribute('data-tab');
+        document.querySelectorAll('.state-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.state-tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const pane = document.getElementById(targetTab);
+        if (pane) pane.classList.add('active');
+      });
+    });
+
     // River Modal Controls
     if (riverCloseBtn) {
       riverCloseBtn.addEventListener('click', closeRiverModal);
@@ -931,6 +1084,38 @@
       });
     }
 
+    // Comparison Modal Controls
+    if (compareBtn) {
+      compareBtn.addEventListener('click', openCompareModal);
+    }
+    if (compareCloseBtn) {
+      compareCloseBtn.addEventListener('click', closeCompareModal);
+    }
+    if (compareModal) {
+      compareModal.addEventListener('click', (e) => {
+        if (e.target === compareModal) closeCompareModal();
+      });
+    }
+
+    // Heritage Quiz Controls
+    if (quizBtn) {
+      quizBtn.addEventListener('click', openQuizModal);
+    }
+    if (quizCloseBtn) {
+      quizCloseBtn.addEventListener('click', closeQuizModal);
+    }
+    if (quizModal) {
+      quizModal.addEventListener('click', (e) => {
+        if (e.target === quizModal) closeQuizModal();
+      });
+    }
+    if (quizNextBtn) {
+      quizNextBtn.addEventListener('click', nextQuizQuestion);
+    }
+    if (quizFlyMapBtn) {
+      quizFlyMapBtn.addEventListener('click', flyToQuizState);
+    }
+
     // River Toggle Overlay Button
     if (toggleRiversBtn) {
       toggleRiversBtn.addEventListener('click', toggleRivers);
@@ -944,11 +1129,18 @@
       legendModeSwitch.addEventListener('click', toggleColorMode);
     }
 
+    // Basemap Switcher Button
+    if (toggleBasemapBtn) {
+      toggleBasemapBtn.addEventListener('click', toggleBasemap);
+    }
+
     // Keyboard Shortcuts (Esc to close, Left/Right for state navigation)
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeModal();
         closeRiverModal();
+        closeCompareModal();
+        closeQuizModal();
         aboutModal.classList.remove('open');
       } else if (modalOverlay.classList.contains('open')) {
         if (e.key === 'ArrowRight') navigateState(1);
@@ -1118,6 +1310,316 @@
     });
 
     searchDropdown.classList.add('show');
+  }
+
+  /**
+   * State Comparison Engine
+   */
+  function initComparisonEngine() {
+    if (!compareSelectA || !compareSelectB) return;
+
+    compareSelectA.innerHTML = '';
+    compareSelectB.innerHTML = '';
+
+    stateData.forEach(st => {
+      const optA = document.createElement('option');
+      optA.value = st.id;
+      optA.textContent = `${st.name} (${st.zone})`;
+      compareSelectA.appendChild(optA);
+
+      const optB = document.createElement('option');
+      optB.value = st.id;
+      optB.textContent = `${st.name} (${st.zone})`;
+      compareSelectB.appendChild(optB);
+    });
+
+    // Default: Rajasthan vs Kerala
+    compareSelectA.value = 'rajasthan';
+    compareSelectB.value = 'kerala';
+
+    compareSelectA.addEventListener('change', renderComparison);
+    compareSelectB.addEventListener('change', renderComparison);
+    renderComparison();
+  }
+
+  function openCompareModal() {
+    if (compareModal) {
+      renderComparison();
+      compareModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeCompareModal() {
+    if (compareModal) {
+      compareModal.classList.remove('open');
+      document.body.style.overflow = '';
+      stopCurrentAudio();
+    }
+  }
+
+  function renderComparison() {
+    if (!compareSelectA || !compareSelectB) return;
+    const stA = stateData.find(s => s.id === compareSelectA.value) || stateData[0];
+    const stB = stateData.find(s => s.id === compareSelectB.value) || stateData[1];
+
+    renderCompareColumn('compareColA', stA);
+    renderCompareColumn('compareColB', stB);
+  }
+
+  function renderCompareColumn(containerId, state) {
+    const container = document.getElementById(containerId);
+    if (!container || !state) return;
+
+    const stNameLower = state.name.toLowerCase().trim();
+    const passingRivers = riversDataList.filter(r => 
+      Array.isArray(r.states) && r.states.some(s => s.toLowerCase().trim() === stNameLower)
+    );
+    const uniqueRivers = [...new Set(passingRivers.map(r => r.name))];
+
+    container.innerHTML = `
+      <div class="compare-hero-block">
+        <img src="${state.image}" alt="${state.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-gold);">
+        <div>
+          <div class="compare-state-title">${state.name}</div>
+          <div style="font-size: 0.78rem; color: #ffd866; margin-top: 2px;">${state.zone} • Capital: ${state.capital}</div>
+          <button class="header-btn compare-audio-btn" style="margin-top: 8px; padding: 4px 12px; font-size: 0.75rem; border-color: #ffd866;" data-state="${state.id}">
+            ▶ Play Soundscape
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="compare-section-title">💃 Traditional Folk Dance</div>
+        <div class="compare-section-content"><strong>${state.folkDance.name}:</strong> ${state.folkDance.desc}</div>
+      </div>
+
+      <div>
+        <div class="compare-section-title">🏷️ Registered GI Heritage</div>
+        <div class="compare-section-content">
+          ${state.giTags.slice(0, 3).map(g => `<span class="gi-tag-pill" style="display:inline-block; margin: 2px 4px 2px 0;">${g.name} (${g.category})</span>`).join('')}
+        </div>
+      </div>
+
+      <div>
+        <div class="compare-section-title">🍲 Culinary Delicacies</div>
+        <div class="compare-section-content">${Array.isArray(state.cuisine) ? state.cuisine.join(' • ') : 'Regional delicacies'}</div>
+      </div>
+
+      <div>
+        <div class="compare-section-title">🎉 Festive Traditions</div>
+        <div class="compare-section-content">${Array.isArray(state.festivals) ? state.festivals.join(' • ') : 'Traditional festivals'}</div>
+      </div>
+
+      <div>
+        <div class="compare-section-title">👘 Traditional Attire & Textiles</div>
+        <div class="compare-section-content">${state.attire || 'Traditional regional handlooms and garments'}</div>
+      </div>
+
+      <div>
+        <div class="compare-section-title">🌊 Passing Rivers & Lifelines</div>
+        <div class="compare-section-content">${uniqueRivers.length > 0 ? uniqueRivers.map(r => `🌊 ${r}`).join(' • ') : 'Local coastal river systems and tributaries'}</div>
+      </div>
+    `;
+
+    const audioBtn = container.querySelector('.compare-audio-btn');
+    if (audioBtn) {
+      audioBtn.addEventListener('click', () => {
+        playFiveSecondSoundscape(state);
+      });
+    }
+  }
+
+  /**
+   * Heritage Trivia & Quiz Challenge Engine
+   */
+  const quizQuestions = [
+    {
+      question: "Which Indian state is celebrated for Kathakali classical dance, the Onam harvest feast, and Kasavu gold-bordered sarees?",
+      options: ["Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh"],
+      correct: 1,
+      stateId: "kerala",
+      explanation: "Kerala is globally celebrated for Kathakali dramatic dance, the grand 26-dish Onam Sadya, and handwoven Kasavu drapes."
+    },
+    {
+      question: "Which sacred river originates from the Gangotri Glacier at Gaumukh and flows through Uttarakhand, UP, Bihar, and West Bengal?",
+      options: ["Yamuna", "Godavari", "Ganga (Ganges)", "Brahmaputra"],
+      correct: 2,
+      stateId: "uttar-pradesh",
+      explanation: "The Ganga is India's longest and most revered river (2,525 km), originating in Uttarakhand and flowing into the Bay of Bengal."
+    },
+    {
+      question: "Blue Pottery, Kathputli puppet theatre, and Dal Baati Churma are iconic cultural heritage symbols of which state?",
+      options: ["Rajasthan", "Gujarat", "Madhya Pradesh", "Haryana"],
+      correct: 0,
+      stateId: "rajasthan",
+      explanation: "Rajasthan holds GI registration for Jaipur Blue Pottery and Kathputlis, paired with the iconic royal culinary delicacy Dal Baati Churma."
+    },
+    {
+      question: "Which North-Eastern state is famous for the week-long Hornbill Festival at Kisama Heritage Village and intricate warrior tribal shawls?",
+      options: ["Assam", "Manipur", "Mizoram", "Nagaland"],
+      correct: 3,
+      stateId: "nagaland",
+      explanation: "Nagaland hosts the world-famous Hornbill Festival ('Festival of Festivals') celebrating the rich traditions of its 16 indigenous Naga tribes."
+    },
+    {
+      question: "The UNESCO World Heritage Sun Temple at Konark and the baked caramelized sweet 'Chhena Poda' belong to which state?",
+      options: ["West Bengal", "Odisha", "Jharkhand", "Chhattisgarh"],
+      correct: 1,
+      stateId: "odisha",
+      explanation: "Odisha is home to the 13th-century Konark Sun Temple, classical Odissi dance, and the celebrated baked dairy dessert Chhena Poda."
+    },
+    {
+      question: "Which state is known as 'The Rice Bowl of India' and is the birthplace of the classical brass-plate Tarangam dance 'Kuchipudi'?",
+      options: ["Andhra Pradesh", "Tamil Nadu", "Telangana", "Karnataka"],
+      correct: 0,
+      stateId: "andhra-pradesh",
+      explanation: "Andhra Pradesh is the cradle of Kuchipudi classical dance and famous GI crafts like Srikalahasthi Kalamkari and Kondapalli toys."
+    },
+    {
+      question: "Makki di Roti with Sarson da Saag, energetic Bhangra folk dance, and vibrant Phulkari geometric embroidery originate from:",
+      options: ["Haryana", "Punjab", "Himachal Pradesh", "Jammu and Kashmir"],
+      correct: 1,
+      stateId: "punjab",
+      explanation: "Punjab's fertile agrarian heritage is celebrated worldwide through high-spirited Bhangra beats, Sarson da Saag, and hand-embroidered Phulkari."
+    },
+    {
+      question: "Which state celebrates the world's longest dance festival with nine nights of Garba dance, and is home to Patola double-ikat silk?",
+      options: ["Maharashtra", "Rajasthan", "Gujarat", "Goa"],
+      correct: 2,
+      stateId: "gujarat",
+      explanation: "Gujarat's Navratri is the largest community dance festival on Earth, accompanied by UNESCO-recognized Garba and Patan Patola weaving."
+    },
+    {
+      question: "Which high-altitude Himalayan region is known for ancient Buddhist Hemis Gompa festivals, Tibetan Dungchen horns, and Perak headdresses?",
+      options: ["Sikkim", "Ladakh", "Uttarakhand", "Himachal Pradesh"],
+      correct: 1,
+      stateId: "ladakh",
+      explanation: "Ladakh is renowned for its high-altitude Tibetan Buddhist monasteries, sacred masked Cham dances, and turquoise-encrusted Perak crowns."
+    },
+    {
+      question: "Which sacred river is known as the 'Dakshin Ganga' (Ganges of the South) and is peninsular India's longest river basin?",
+      options: ["Krishna", "Godavari", "Kaveri", "Mahanadi"],
+      correct: 1,
+      stateId: "maharashtra",
+      explanation: "The Godavari originates at Trimbakeshwar in Maharashtra and spans 1,465 km across Maharashtra, Telangana, and Andhra Pradesh."
+    },
+    {
+      question: "The ancient 9-yard 'Nauvari' saree draped dhoti-style, energetic Lavani dance, and the grand 10-day Ganesh Chaturthi festival belong to:",
+      options: ["Goa", "Karnataka", "Maharashtra", "Madhya Pradesh"],
+      correct: 2,
+      stateId: "maharashtra",
+      explanation: "Maharashtra celebrates vibrant Maratha culture through Shivaji Jayanti, Lavani Dholki rhythms, Paithani silk Nauvari sarees, and Ganesh Utsav."
+    },
+    {
+      question: "Golden Muga Silk (found nowhere else on Earth), the energetic Bihu spring dance with Pepa horns, and Kaziranga belong to:",
+      options: ["Meghalaya", "Assam", "Arunachal Pradesh", "Tripura"],
+      correct: 1,
+      stateId: "assam",
+      explanation: "Assam's Muga Golden Silk holds GI status, celebrated alongside Rongali Bihu and rich tea garden heritage."
+    }
+  ];
+
+  let currentQuizIndex = 0;
+  let quizScore = 0;
+  let quizStreak = 0;
+  let answeredCurrent = false;
+
+  function initQuizEngine() {
+    currentQuizIndex = 0;
+    quizScore = 0;
+    quizStreak = 0;
+  }
+
+  function openQuizModal() {
+    if (quizModal) {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      quizStreak = 0;
+      renderQuizQuestion();
+      quizModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeQuizModal() {
+    if (quizModal) {
+      quizModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function renderQuizQuestion() {
+    answeredCurrent = false;
+    const q = quizQuestions[currentQuizIndex];
+    if (!q) return;
+
+    if (quizScoreVal) quizScoreVal.textContent = quizScore;
+    if (quizStreakVal) quizStreakVal.textContent = `🔥 ${quizStreak}`;
+    if (quizCounterVal) quizCounterVal.textContent = `${currentQuizIndex + 1} / ${quizQuestions.length}`;
+    if (quizQuestionText) quizQuestionText.textContent = q.question;
+    if (quizFeedbackBox) quizFeedbackBox.style.display = 'none';
+
+    if (quizOptionsGrid) {
+      quizOptionsGrid.innerHTML = '';
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option-btn';
+        btn.textContent = `${String.fromCharCode(65 + idx)}. ${optText}`;
+        btn.addEventListener('click', () => handleQuizAnswer(idx, btn));
+        quizOptionsGrid.appendChild(btn);
+      });
+    }
+  }
+
+  function handleQuizAnswer(selectedIndex, selectedBtn) {
+    if (answeredCurrent) return;
+    answeredCurrent = true;
+
+    const q = quizQuestions[currentQuizIndex];
+    const optionButtons = quizOptionsGrid.querySelectorAll('.quiz-option-btn');
+    optionButtons.forEach(b => b.disabled = true);
+
+    if (selectedIndex === q.correct) {
+      selectedBtn.classList.add('correct');
+      quizScore += 10;
+      quizStreak += 1;
+      if (quizFeedbackStatus) {
+        quizFeedbackStatus.innerHTML = '<span style="color: #4ade80;">✨ Correct Answer! (+10 pts)</span>';
+      }
+    } else {
+      selectedBtn.classList.add('incorrect');
+      if (optionButtons[q.correct]) optionButtons[q.correct].classList.add('correct');
+      quizStreak = 0;
+      if (quizFeedbackStatus) {
+        quizFeedbackStatus.innerHTML = '<span style="color: #f87171;">❌ Not Quite!</span>';
+      }
+    }
+
+    if (quizScoreVal) quizScoreVal.textContent = quizScore;
+    if (quizStreakVal) quizStreakVal.textContent = `🔥 ${quizStreak}`;
+
+    if (quizFeedbackExplanation) {
+      quizFeedbackExplanation.textContent = q.explanation;
+    }
+    if (quizFeedbackBox) {
+      quizFeedbackBox.style.display = 'block';
+    }
+  }
+
+  function nextQuizQuestion() {
+    currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
+    renderQuizQuestion();
+  }
+
+  function flyToQuizState() {
+    const q = quizQuestions[currentQuizIndex];
+    if (!q || !q.stateId) return;
+    const targetState = stateData.find(s => s.id === q.stateId);
+    if (targetState) {
+      closeQuizModal();
+      selectState(targetState, null);
+    }
   }
 
   /**

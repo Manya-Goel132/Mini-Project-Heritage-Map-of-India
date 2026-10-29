@@ -46,13 +46,35 @@ In strict accordance with the project abstract and presentation specifications (
 - **Dual Coloring Modes:** Toggle effortlessly between **🎨 Distinct State Hues** and **🗺️ Regional Zones** (North, South, East, West, Central, North-East, and UTs) via the floating map toolbar or the dynamic legend.
 - **Dynamic Floating Legend:** Color-coded reference card that updates in real-time between Distinct and Regional views, adapting cleanly across desktop and mobile.
 
-### 2. Sacred Rivers of India (Hydrological Lifelines)
+### 2. Deep State Heritage Exploration (5-Tab Drawer Architecture)
+- **📖 Overview Tab:** In-depth cultural legacy narrative, capital city, official spoken regional languages, indigenous heritage musical instruments, and UNESCO World Heritage Monuments & Architecture.
+- **🏷️ GI & Crafts Tab:** Full catalog of certified Geographical Indication (GI) products with official classification badges (*Handicrafts, Textiles, Agricultural, Foodstuff*) alongside traditional handicraft legacy descriptions.
+- **💃 Dance & Festivals Tab:** Classical and regional folk dance forms with historical context, alongside major traditional harvest, seasonal, and spiritual festivals.
+- **🍲 Cuisine & Attire Tab:** Iconic state culinary delicacies and traditional recipes paired with authentic traditional attire, ceremonial costumes, and handloom textiles.
+- **🌊 Rivers & Geography Tab:** Geographic landscape summary, prominent mountain ranges/forests/deserts, and interactive passing river badges linking directly to river profiles.
+
+### 3. Dual State Cultural Comparison Engine (⚖️ Compare)
+- **Side-by-Side Cultural Synthesis:** Compare any two Indian States or Union Territories simultaneously across all major cultural dimensions.
+- **Dual Soundscape Triggers:** Listen to both states' traditional acoustic recordings side-by-side to appreciate diverse regional soundscapes.
+- **Comparative Metrics:** Instant comparison of capital, folk dances, registered GI tags, culinary masterpieces, festive traditions, and handloom textiles.
+
+### 4. Gamified Indian Heritage Trivia Challenge (🎯 Quiz)
+- **Dynamic Interactive Learning:** 12-question randomized trivia challenge spanning sacred rivers, GI tag origins, traditional dance forms, and culinary arts.
+- **Streak & Scoring HUD:** Tracks live score, correct answer streaks (`🔥`), and progress.
+- **Instant Explanations & Map Fly-To:** Interactive feedback reveals the historical context of each answer, with a one-click **"📍 Fly to State on Map"** button that automatically navigates the camera to the state.
+
+### 5. Multi-Style Basemap Switcher (🛰️)
+- **Midnight Dark Canvas:** High-contrast dark cartography optimized for glowing river centerlines and vivid state polygons (Esri Dark Gray).
+- **Satellite Topography:** Ultra-high-resolution real-world satellite imagery showing actual mountain ranges, river valleys, and coastlines (Esri World Imagery).
+- **Warm Heritage Terrain:** Clean, elegant soft-terrain cartography for daytime reading and geographical context (Carto Voyager).
+
+### 6. Sacred Rivers of India (Hydrological Lifelines)
 - **35+ Major Centerlines & Basins:** Features high-precision vector centerlines with luminescent multi-layer glowing effects for major rivers: Ganga, Yamuna, Brahmaputra, Indus, Godavari, Krishna, Kaveri, Narmada, Tapti, Mahanadi, Sutlej, Chenab, Jhelum, Ravi, Beas, Chambal, Tungabhadra, Teesta, Betwa, Son, Ghaghara, Gandak, Penna, Sabarmati, and Periyar.
 - **Interactive River Details Modal:** Click any river to inspect its Devanagari name, river system, official length, glacial/mountain origin, discharge basin, traversed states, historic ghats/monuments, and cultural/spiritual significance.
 - **Two-Way State-River Connectivity:** State cards display passing rivers as interactive pills; River cards display traversed states as interactive chips for seamless exploration.
 - **River Focus Mode:** Click "Highlight River Course" to automatically center and zoom the camera onto the river's entire basin.
 
-### 3. Multisensory 5-Second Traditional Soundscape Engine (PPT Slide 4)
+### 7. Multisensory 5-Second Traditional Soundscape Engine (PPT Slide 4)
 - **Authentic Field & Studio Recordings:** Incorporates 17 verified traditional recordings sourced from the **Centre for Cultural Resources and Training (CCRT, Ministry of Culture, Govt. of India)**, **ICCR**, and **Wikimedia Commons** (e.g., Punjab Dhol & Algoze, Rajasthan Kamaicha & Khartal, Maharashtra Lavani Dholki, Kashmir Santoor & Rabab, Assam Bihu Pepa, Ladakh Tibetan Dungchen, Carnatic Flute & Veena).
 - **Client-Side Forced Short-Play:** 
   - Complete, uncompressed audio tracks are preserved on disk.
@@ -60,18 +82,13 @@ In strict accordance with the project abstract and presentation specifications (
   - Includes a user toggle between **⚡ 5s Forced Snippet** and **🎵 Full Track** mode.
 - **Visual Equalizer Wave:** Real-time animated CSS sound equalizer and interactive progress bar indicating exact snippet duration.
 
-### 4. Comprehensive Cultural Heritage Catalog
-- **Geographical Indication (GI) Tags:** Over 120+ registered GI tags documented across Indian states (e.g., Kanjeevaram Silk, Darjeeling Tea, Naga Mircha, Kashmiri Pashmina, Pochampally Ikat, Aranmula Kannadi, Channapatna Toys, Blue Pottery of Jaipur).
-- **Folk Dance & Arts:** Rich entries covering classical and regional folk traditions (Kathakali, Chhau, Garba, Rouf, Bihu, Yakshagana, Ghoomar, Cheraw, Kalbelia).
-- **Cultural Narratives:** Curated historical backgrounds, state capitals, regional badges, and traditional instruments cataloged for every state.
-
-### 5. Interactive Navigation & Exploration Tools
+### 8. Interactive Navigation & Exploration Tools
 - **Joint State & River Autocomplete Search:** Real-time query filtering across states, capital cities, GI products, dance forms, and river systems with custom-badged suggestion items.
 - **Layer Category Filters:** Switch views between *All Traditions*, *Sacred Rivers*, *GI-Tagged Products*, *Folk Dance & Arts*, *Heritage Sites*, and *Folk Soundscapes*.
 - **Quick-Jump State Carousel:** Bottom carousel bar displaying instant-navigation chips for all states and UTs.
 - **Random State Explorer (🎲 Explore):** One-click discovery mode that pans the map and opens the heritage card for an unexplored Indian state.
 
-### 6. Zoom-Resilient Responsive Architecture
+### 9. Zoom-Resilient Responsive Architecture
 - Rigid flex-column viewport architecture (`height: 100dvh`, zero window scrollbars) preventing layout shifts, overlap, or clipping.
 - Rigorously tested and visually verified in Google Chrome across standard (100%), zoomed-out (67%), zoomed-in (125%), and mobile viewports.
 
@@ -82,13 +99,22 @@ In strict accordance with the project abstract and presentation specifications (
 ### 1. Distinct State Colors & Glowing Sacred Rivers Overview (100% Zoom)
 ![Heritage Map Desktop Overview](docs/screenshots/overview_desktop.png)
 
-### 2. Interactive Sacred River Details Modal
+### 2. Dual State Cultural Comparison Engine
+![State Comparison View](docs/screenshots/compare_states_view.png)
+
+### 3. State Heritage Drawer (5-Tab Architecture - Cuisine & Attire)
+![Cuisine and Attire Tab View](docs/screenshots/cuisine_attire_tab_view.png)
+
+### 4. Interactive Heritage Trivia Challenge
+![Heritage Quiz Challenge View](docs/screenshots/heritage_quiz_view.png)
+
+### 5. Satellite Topography Basemap View
+![Satellite Basemap View](docs/screenshots/satellite_basemap_view.png)
+
+### 6. Interactive Sacred River Details Modal
 ![River Details Modal](docs/screenshots/river_modal_details.png)
 
-### 3. State Heritage Card with GI Tags & Passing River Lifelines
-![State Heritage Modal with Rivers](docs/screenshots/state_modal_with_rivers.png)
-
-### 4. Regional Zones Mode & Focused River View
+### 7. Regional Zones Mode & Focused River View
 ![Regional Zones View](docs/screenshots/regional_zones_view.png)
 
 ---
@@ -118,6 +144,10 @@ Interactive-Geographical-Heritage-Map/
 ├── docs/
 │   └── screenshots/             # Interface showcase captures
 │       ├── overview_desktop.png          # Distinct state colors and glowing river vectors
+│       ├── compare_states_view.png       # Dual state cultural comparison engine
+│       ├── cuisine_attire_tab_view.png   # 5-tab state heritage drawer (Cuisine & Attire)
+│       ├── heritage_quiz_view.png        # Interactive heritage trivia challenge
+│       ├── satellite_basemap_view.png    # High-resolution satellite topography basemap
 │       ├── river_modal_details.png       # Detailed river heritage modal with metrics and basin
 │       ├── state_modal_with_rivers.png   # State modal with passing rivers lifelines
 │       └── regional_zones_view.png       # Regional zones dual-view mode

@@ -2,6 +2,7 @@
  * Interactive Geographical Heritage Map of India
  * Cultural Dataset per State & Union Territory
  * PPT Slide 6 Architecture: const stateData = [...]
+ * Enriched with Festivals, Culinary Heritage, Traditional Attire, and Linguistic Diversity
  * Project by Manya Goel (2400300100237), Guided by Ms. Disha
  * Inderprastha Engineering College, Ghaziabad
  */
@@ -45,7 +46,19 @@ const stateData = [
     ],
     "culturalSummary": "An archipelago renowned for its prehistoric indigenous tribes, marine heritage, and pivotal role in India's freedom movement.",
     "audioStartOffset": 0,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Ossuary Feast",
+      "Island Tourism Festival",
+      "Subhash Mela"
+    ],
+    "cuisine": [
+      "Fish Curry & Coconut Rice",
+      "Amritsari Kulcha (Settler culture)",
+      "Lobster & Crab Delicacies"
+    ],
+    "attire": "Traditional indigenous bark cloth & body ornamentation; light tropical handloom cottons",
+    "languages": "Bengali, Hindi, Tamil, Telugu, Nicobarese, English"
   },
   {
     "id": "andhra-pradesh",
@@ -95,7 +108,21 @@ const stateData = [
     ],
     "culturalSummary": "Celebrated for its grand classical literature, sacred temple shrines, intricate pen-and-block Kalamkari traditions, and Carnatic music masters.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Makara Sankranti",
+      "Ugadi (Telugu New Year)",
+      "Tirupati Brahmotsavam",
+      "Visakha Utsav"
+    ],
+    "cuisine": [
+      "Hyderabadi / Andhra Biryani",
+      "Gongura Pachadi",
+      "Pootharekulu (Paper Sweet)",
+      "Pesarattu with Ginger Chutney"
+    ],
+    "attire": "Dharmavaram & Mangalagiri Silk Sarees with gold zari; Dhoti & Kurta with Kanduva scarf",
+    "languages": "Telugu, Urdu, English"
   },
   {
     "id": "arunachal-pradesh",
@@ -140,7 +167,21 @@ const stateData = [
     ],
     "culturalSummary": "Home to 26 major indigenous tribes, ancient Mahayana Buddhist sanctuaries, and pristine biodiverse Himalayan valleys.",
     "audioStartOffset": 2,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Losar (Monpa Tibetan New Year)",
+      "Nyokum (Nyishi harvest)",
+      "Siang River Festival",
+      "Dree Festival"
+    ],
+    "cuisine": [
+      "Thukpa & Momos",
+      "Pika Pila (Bamboo shoot pickle)",
+      "Lukter (Dry meat with chili)",
+      "Apong (Rice brew)"
+    ],
+    "attire": "Woven wrap-around skirts (Gale), bead necklaces, bamboo hats with hornbill beaks",
+    "languages": "Nyishi, Apatani, Monpa, Adi, Hindi, English"
   },
   {
     "id": "assam",
@@ -190,7 +231,21 @@ const stateData = [
     ],
     "culturalSummary": "A sacred river valley blessed with mystical Vaishnavite Satra monasteries, living handloom legacies, and rolling tea gardens.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Rongali Bihu (Spring Festival)",
+      "Kati Bihu",
+      "Bhogali Bihu (Harvest)",
+      "Ambubachi Mela at Kamakhya"
+    ],
+    "cuisine": [
+      "Masor Tenga (Tangy fish curry)",
+      "Khar (Alkaline raw papaya broth)",
+      "Pitha (Rice cakes)",
+      "Duck Curry with Ash Gourd"
+    ],
+    "attire": "Muga & Eri Golden Silk Mekhela Chador with Riha and woven floral Jaapi headgear",
+    "languages": "Assamese, Bodo, Bengali, English"
   },
   {
     "id": "bihar",
@@ -240,7 +295,21 @@ const stateData = [
     ],
     "culturalSummary": "The historical cradle of the Maurya and Gupta Empires, home to Buddha's enlightenment, Mahavira's nirvana, and Asia's greatest ancient universities.",
     "audioStartOffset": 0,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Chhath Puja (Solar worship at sacred rivers)",
+      "Sonepur Cattle Fair",
+      "Bihula Festival",
+      "Sama Chakeva"
+    ],
+    "cuisine": [
+      "Litti Chokha with Sattu",
+      "Thekua (Chhath Prasad)",
+      "Khaja of Silao",
+      "Chana Ghugni & Sattu Sherbet"
+    ],
+    "attire": "Bhagalpuri Tussar Silk Sarees; traditional Kurta-Pajama with Gamchha",
+    "languages": "Bhojpuri, Maithili, Magahi, Hindi, Urdu"
   },
   {
     "id": "chandigarh",
@@ -275,7 +344,21 @@ const stateData = [
     ],
     "culturalSummary": "India's first planned city designed by Le Corbusier, blending world-class modernist urbanism with vibrant Punjabi and Haryanvi cultural traditions.",
     "audioStartOffset": 0.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Rose Festival",
+      "Chandigarh Carnival",
+      "Baisakhi",
+      "Mango Festival"
+    ],
+    "cuisine": [
+      "Amritsari Naan & Chole",
+      "Butter Chicken",
+      "Lassi & Paneer Tikka",
+      "Street Chaat"
+    ],
+    "attire": "Modern fusion wear alongside traditional Punjabi Kurta-Pyjama and Phulkari Dupattas",
+    "languages": "Hindi, Punjabi, English"
   },
   {
     "id": "chhattisgarh",
@@ -325,7 +408,21 @@ const stateData = [
     ],
     "culturalSummary": "A biodiversity haven deeply rooted in tribal harmony, prehistoric rock paintings, and metallurgical craftsmanship.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Bastar Dussehra (75-day tribal festival)",
+      "Madai Festival",
+      "Hareli (Agricultural festival)",
+      "Bhoramdeo Mahotsav"
+    ],
+    "cuisine": [
+      "Muthia (Steamed rice dumplings)",
+      "Chila with Chutney",
+      "Aamat (Tribal mixed vegetable sambar)",
+      "Bafauri"
+    ],
+    "attire": "Lugda (Kosa silk drape) with Polkha; tribal bell-metal ornaments and Dhoti-Kurta",
+    "languages": "Chhattisgarhi, Gondi, Halbi, Hindi"
   },
   {
     "id": "dadra-and-nagar-haveli",
@@ -360,7 +457,21 @@ const stateData = [
     ],
     "culturalSummary": "A serene territory preserving ancient Varli and Dhodia tribal customs alongside lingering Portuguese colonial heritage.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Tarpa Festival",
+      "Diwaso Festival",
+      "Barash Festival",
+      "Holi"
+    ],
+    "cuisine": [
+      "Ubadiyu (Earthen pot roasted vegetables)",
+      "Khatmitthi Dal",
+      "Crab Masala",
+      "Bamboo Shoot Curry"
+    ],
+    "attire": "Warli painted drapes, Lugden wrap with silver armlets; Dhoti with colorful headcloth",
+    "languages": "Gujarati, Marathi, Varli, Hindi"
   },
   {
     "id": "daman-and-diu",
@@ -395,7 +506,21 @@ const stateData = [
     ],
     "culturalSummary": "An enchanting maritime enclave fortified by 16th-century stone ramparts overlooking the Arabian Sea.",
     "audioStartOffset": 0.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Festa de Diu",
+      "Nariyal Poornima",
+      "Garba Mahotsav",
+      "Christmas on the Coast"
+    ],
+    "cuisine": [
+      "Damanese Fish Koliwada",
+      "Crab Masala",
+      "Portuguese Pao & Sorpotel",
+      "Pappad & Seer Fish Curry"
+    ],
+    "attire": "Portuguese-influenced formal wear, vibrant Gujarati Bandhani sarees, and fisherman Dhotis",
+    "languages": "Gujarati, Portuguese, Marathi, English, Hindi"
   },
   {
     "id": "delhi",
@@ -430,7 +555,21 @@ const stateData = [
     ],
     "culturalSummary": "Seven historic cities layered in one: from Mahabharata's Indraprastha to Mughal splendor and modern national pride.",
     "audioStartOffset": 1.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Phool Walon Ki Sair",
+      "Qutub Festival",
+      "Diwali & Eid at Jama Masjid",
+      "Dilli Haat Food Melas"
+    ],
+    "cuisine": [
+      "Purani Dilli Nihari & Mutton Korma",
+      "Chole Bhature",
+      "Paranthe Wali Gali Stuffed Paranthas",
+      "Chaat & Butter Chicken"
+    ],
+    "attire": "Mughal Zardozi embroideries, Chikankari Kurtas, alongside cosmopolitan attire",
+    "languages": "Hindi, Punjabi, Urdu, English"
   },
   {
     "id": "goa",
@@ -480,7 +619,21 @@ const stateData = [
     ],
     "culturalSummary": "A coastal paradise steeped in Portuguese architecture, sunlit beaches, Konkani folklore, and spice plantations.",
     "audioStartOffset": 0.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Goa Carnival (Intruz)",
+      "Shigmo (Folk spring festival)",
+      "Feast of St. Francis Xavier",
+      "Bonderam Festival"
+    ],
+    "cuisine": [
+      "Goan Fish Curry Rice",
+      "Pork Vindaloo & Sorpotel",
+      "Bebinca (7-layer coconut dessert)",
+      "Feni & Poee bread"
+    ],
+    "attire": "Kunbi cotton saree with red-and-white checks; casual coastal linen shirts & floral dresses",
+    "languages": "Konkani, Marathi, Portuguese, English, Hindi"
   },
   {
     "id": "gujarat",
@@ -530,7 +683,21 @@ const stateData = [
     ],
     "culturalSummary": "The homeland of Mahatma Gandhi, legendary Harappan ports of Lothal, vibrant Rann of Kutch deserts, and global entrepreneurial spirit.",
     "audioStartOffset": 0.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Navratri Garba (World's longest dance festival)",
+      "Rann Utsav (White Desert festival)",
+      "Uttarayan (Kite Festival)",
+      "Janmashtami at Dwarka"
+    ],
+    "cuisine": [
+      "Dhokla, Khandvi & Thepla",
+      "Gujarati Thali with Dal & Kadhi",
+      "Undhiyu with Puri",
+      "Fafda-Jalebi"
+    ],
+    "attire": "Chaniya Choli with mirrorwork and Bandhani; Kediyu with Chorno and turban (Pheta)",
+    "languages": "Gujarati, Kachhi, Hindi, English"
   },
   {
     "id": "haryana",
@@ -565,7 +732,21 @@ const stateData = [
     ],
     "culturalSummary": "Where Lord Krishna delivered the timeless message of the Bhagavad Gita, famous today as India's sporting and agrarian powerhouse.",
     "audioStartOffset": 0.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Surajkund International Crafts Mela",
+      "Gugga Naumi",
+      "Teej Festival",
+      "Pinjore Heritage Festival"
+    ],
+    "cuisine": [
+      "Bajra Khichdi with Ghee",
+      "Singri ki Sabzi",
+      "Kadhi Pakora & Bathua Raita",
+      "Churma & Fresh Makkhan"
+    ],
+    "attire": "Daaman (Voluminous skirt), Kurti, and Chunder drape; Dhoti-Kurta with Khandwa (turban)",
+    "languages": "Haryanvi, Hindi, Punjabi"
   },
   {
     "id": "himachal-pradesh",
@@ -615,7 +796,21 @@ const stateData = [
     ],
     "culturalSummary": "A pristine mountain sanctuary of pine valleys, ancient wood-and-stone temples, and living Tibetan Buddhist culture.",
     "audioStartOffset": 0.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Kullu Dussehra (Assembly of 200+ devtas)",
+      "Minjar Fair of Chamba",
+      "Halda Festival",
+      "Mandi Shivratri"
+    ],
+    "cuisine": [
+      "Himachali Dham (Festive multi-course feast)",
+      "Siddu (Steamed bun with poppy seed paste)",
+      "Madra (Chickpea yogurt curry)",
+      "Babru"
+    ],
+    "attire": "Pattu woollen shawl with silver brooches; Kullu & Kinnauri embroidered round woolen caps",
+    "languages": "Pahari, Kangri, Mandiali, Hindi"
   },
   {
     "id": "jammu-and-kashmir",
@@ -665,7 +860,21 @@ const stateData = [
     ],
     "culturalSummary": "Celebrated by Mughal emperors as heaven on earth, world-famed for its saffron, Sufi poetry, and timeless artisanal crafts.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Tulip Festival (Asia's largest garden)",
+      "Shikara Festival at Dal Lake",
+      "Baisakhi at Mughal Gardens",
+      "Kheer Bhawani Mela"
+    ],
+    "cuisine": [
+      "Wazwan (36-course feast: Rogan Josh, Gushtaba, Rista)",
+      "Kashmiri Kahwa with Saffron & Almonds",
+      "Modur Pulao",
+      "Nadru Yakhni"
+    ],
+    "attire": "Pheran (Embroidered woollen tunic) with Tilla embroidery and silver Taranga headgear",
+    "languages": "Kashmiri, Dogri, Urdu, Gojri, Hindi"
   },
   {
     "id": "jharkhand",
@@ -700,7 +909,21 @@ const stateData = [
     ],
     "culturalSummary": "Rich in tribal bravery inspired by Birsa Munda, mineral treasures, prehistoric rock art, and holy pilgrimage peaks.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Sarhul (Sal blossom spring festival)",
+      "Karam Festival",
+      "Sohrai & Khovar Art Festival",
+      "Tusu Parab"
+    ],
+    "cuisine": [
+      "Dhuska with Ghugni",
+      "Rugra & Pitho",
+      "Chilka Roti",
+      "Bamboo Shoot (Karil) Curry"
+    ],
+    "attire": "Tussar silk Panchi and Parhan; tribal bead jewelry and traditional Gamchha",
+    "languages": "Santali, Ho, Mundari, Khortha, Hindi"
   },
   {
     "id": "karnataka",
@@ -750,7 +973,21 @@ const stateData = [
     ],
     "culturalSummary": "A magnificent heritage state uniting Hoysala architecture, Carnatic music pioneers, and today's Silicon Valley of India.",
     "audioStartOffset": 3,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Mysore Dasara (Jumboo Savari grand royal procession)",
+      "Kambala Buffalo Race",
+      "Karaga Festival",
+      "Hampi Utsav"
+    ],
+    "cuisine": [
+      "Bisi Bele Bath & Mysore Pak",
+      "Neer Dosa & Mangalore Fish Curry",
+      "Ragi Mudde with Saaru",
+      "Dharwad Pedha"
+    ],
+    "attire": "Mysore Zari Silk Sarees & Ilkal Sarees; Dhoti (Panche) with Angavastram and Mysore Peta",
+    "languages": "Kannada, Tulu, Kodava, Konkani, English"
   },
   {
     "id": "kerala",
@@ -800,7 +1037,21 @@ const stateData = [
     ],
     "culturalSummary": "Renowned for tranquil backwaters, classical Ayurveda, lush coconut groves, and spectacular temple festivals like Thrissur Pooram.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Onam (Harvest festival & Pookkalam)",
+      "Thrissur Pooram (Grand temple elephant procession)",
+      "Vishu (New Year)",
+      "Nehru Trophy Boat Race (Vallam Kali)"
+    ],
+    "cuisine": [
+      "Onam Sadya (26-dish feast on banana leaf)",
+      "Appam with Ishtu (Coconut stew)",
+      "Malabar Biryani & Karimeen Pollichathu",
+      "Palada Payasam"
+    ],
+    "attire": "Kasavu Mundum Neriyathum (Cream cotton saree with golden zari); Mundu with Jubba for men",
+    "languages": "Malayalam, English"
   },
   {
     "id": "ladakh",
@@ -845,7 +1096,21 @@ const stateData = [
     ],
     "culturalSummary": "An awe-inspiring cold desert where Tibetan Buddhist philosophy, stupas, and nomadic pastoralism flourish in thin air.",
     "audioStartOffset": 2,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Hemis Monastery Festival (Sacred Cham masked dances)",
+      "Ladakh Festival",
+      "Losar",
+      "Sindhu Darshan Festival"
+    ],
+    "cuisine": [
+      "Thukpa & Tingmo (Steamed flower bread)",
+      "Skyu (Traditional root vegetable stew)",
+      "Butter Tea (Gur Gur Chai)",
+      "Chhurpi (Yak cheese)"
+    ],
+    "attire": "Goncha (Thick woolen robe belted with Skerag) and turquoise-studded Perak headdress",
+    "languages": "Ladakhi (Bhoti), Balti, Tibetan, Urdu, English"
   },
   {
     "id": "lakshadweep",
@@ -880,7 +1145,20 @@ const stateData = [
     ],
     "culturalSummary": "India's tranquil coral atoll territory, famous for pristine lagoons, sustainable tuna fishing, and maritime heritage.",
     "audioStartOffset": 0,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Eid-ul-Fitr & Eid-ul-Adha",
+      "Milad-un-Nabi",
+      "National Island Festival"
+    ],
+    "cuisine": [
+      "Mus Kavaab (Spiced tuna cubes)",
+      "Tuna Biryani & Coconut Curries",
+      "Rayereha (Red tuna gravy)",
+      "Batla Appam"
+    ],
+    "attire": "Kachi wrap with silver waist belt and Libus long dress; lungi and white cotton shirt",
+    "languages": "Jasen, Malayalam, Mahl (Minicoy), English"
   },
   {
     "id": "madhya-pradesh",
@@ -930,7 +1208,21 @@ const stateData = [
     ],
     "culturalSummary": "Home to prehistoric cave art, the grand stupas of Ashoka, the sensual stone carvings of Khajuraho, and premier tiger reserves.",
     "audioStartOffset": 0,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Khajuraho Dance Festival",
+      "Tansen Music Festival at Gwalior",
+      "Bhagoria Haat Tribal Festival",
+      "Ujjain Simhastha Kumbh Mela"
+    ],
+    "cuisine": [
+      "Poha-Jalebi & Bhutte Ka Kees",
+      "Dal Bafla with Ghee",
+      "Chanderi Mutton Curry",
+      "Mawa Bati sweet"
+    ],
+    "attire": "Chanderi & Maheshwari handloom sarees; Dhoti-Kurta with vibrant Safa headgear",
+    "languages": "Hindi, Malvi, Bundelkhandi, Nimadi, Gondi"
   },
   {
     "id": "maharashtra",
@@ -980,7 +1272,21 @@ const stateData = [
     ],
     "culturalSummary": "A titan of Indian history forged by Chhatrapati Shivaji Maharaj, spiritual saints like Tukaram, and modern financial-cultural capital Mumbai.",
     "audioStartOffset": 0,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Ganesh Chaturthi (Grand 10-day celebration)",
+      "Gudi Padwa (Marathi New Year)",
+      "Shivaji Maharaj Jayanti",
+      "Pola (Bull honoring festival)"
+    ],
+    "cuisine": [
+      "Vada Pav & Misal Pav",
+      "Puran Poli with Ghee",
+      "Pithla Bhakri with Thecha",
+      "Modak (Lord Ganesha's sacred sweet)"
+    ],
+    "attire": "Nauvari (9-yard Paithani silk saree draped dhoti-style) with pearl Nath; Kurta-Dhoti with Puneri Pagadi",
+    "languages": "Marathi, Konkani, Hindi, English"
   },
   {
     "id": "manipur",
@@ -1030,7 +1336,21 @@ const stateData = [
     ],
     "culturalSummary": "Birthplace of modern polo (Sagol Kangjei), renowned for classical Raas Leela dance, black stone pottery, and unique floating phumdis.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Sangai Festival (Tourism & culture carnival)",
+      "Yaoshang (Spring Holi with Thabal Chongba)",
+      "Lai Haraoba",
+      "Cheiraoba"
+    ],
+    "cuisine": [
+      "Eromba (Boiled fish & vegetable mash with Raja Mircha)",
+      "Kangshoi (Vegetable stew)",
+      "Chak-hao Kheer (Black aromatic rice pudding)",
+      "Singju (Spicy herb salad)"
+    ],
+    "attire": "Innaphi shawl and Phanek cylindrical skirt with intricate borders; Dhoti with Pheijom turban",
+    "languages": "Meiteilon (Manipuri), Tangkhul, Thadou, English"
   },
   {
     "id": "meghalaya",
@@ -1075,7 +1395,21 @@ const stateData = [
     ],
     "culturalSummary": "A matrilineal society blessed with emerald waterfalls, sacred groves protected by village taboos, and breathtaking living bio-architecture.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Wangala Festival (100-drum harvest dance)",
+      "Nongkrem Dance Festival",
+      "Cherry Blossom Festival in Shillong",
+      "Behdienkhlam"
+    ],
+    "cuisine": [
+      "Jadoh (Red hill rice cooked with meat)",
+      "Doh Khlieh (Pork salad with onion & ginger)",
+      "Nakham Bitchi (Dry fish soup)",
+      "Pukhlein (Rice sweet bread)"
+    ],
+    "attire": "Jainsem and Dhara silk wrap drapes; Khasi feathered turban with silver headbands and coral beads",
+    "languages": "Khasi, Garo, Pnar, English"
   },
   {
     "id": "mizoram",
@@ -1120,7 +1454,21 @@ const stateData = [
     ],
     "culturalSummary": "A peaceful highland state guided by Tlawmngaihna (selfless duty to the community), choral music traditions, and pristine green landscapes.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Chapchar Kut (Spring bamboo clearing festival)",
+      "Mim Kut",
+      "Pawl Kut (Harvest festival)",
+      "Thalfavang Kut"
+    ],
+    "cuisine": [
+      "Bai (Pork and mustard leaf stew with bamboo shoots)",
+      "Sawhchiar (Meat rice porridge)",
+      "Vawksa Rep (Smoked pork)",
+      "Panch Phoran Tarka"
+    ],
+    "attire": "Puan (Handwoven colorful wrap skirt) with Puanchei festive attire and bamboo cane headdresses",
+    "languages": "Mizo, English"
   },
   {
     "id": "nagaland",
@@ -1165,7 +1513,21 @@ const stateData = [
     ],
     "culturalSummary": "The homeland of 16 distinct Naga tribes, celebrated for vibrant warrior textiles, indigenous woodcraft, and the pan-tribal Hornbill Festival.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Hornbill Festival (Festival of Festivals at Kisama Heritage Village)",
+      "Sekrenyi (Angami purification festival)",
+      "Moatsu (Ao harvest festival)",
+      "Aoleang (Konyak festival)"
+    ],
+    "cuisine": [
+      "Smoked Pork with Axone (Fermented soya bean)",
+      "Bamboo Shoot Stew",
+      "Bhut Jolokia (Ghost Pepper) Chutney",
+      "Galho (Savory rice khichdi)"
+    ],
+    "attire": "Distinct warrior tribal shawls (Tsungkotepsu, Rongsu) with cowrie shells and hornbill feather crowns",
+    "languages": "Ao, Angami, Sumi, Lotha, Nagamese, English"
   },
   {
     "id": "odisha",
@@ -1215,7 +1577,21 @@ const stateData = [
     ],
     "culturalSummary": "The historic Kalinga empire where Emperor Ashoka renounced war for peace, blessed with ancient temple spires and beach shrines.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Ratha Yatra of Puri (Grand Chariot festival)",
+      "Konark Dance Festival",
+      "Boita Bandana / Bali Jatra",
+      "Raja Parba (Earth celebration)"
+    ],
+    "cuisine": [
+      "Pakhala Bhata with Badi Chura",
+      "Chhena Poda (Baked caramelized cheese dessert)",
+      "Dalma with Rice",
+      "Puri Jagannath Mahaprasad (56 Bhog)"
+    ],
+    "attire": "Sambalpuri & Bomkai Ikkat silk sarees with temple borders; traditional Dhoti with Khandua Patta scarf",
+    "languages": "Odia, Sambalpuri, Santali, Hindi, English"
   },
   {
     "id": "puducherry",
@@ -1255,7 +1631,21 @@ const stateData = [
     ],
     "culturalSummary": "A charming seaside enclave where French colonial architecture, Tamil spiritual culture, and Sri Aurobindo's integral yoga unite.",
     "audioStartOffset": 2,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "International Yoga Festival",
+      "Bastille Day Celebration",
+      "Masquerade / Mangani Festival",
+      "French Food & Heritage Festival"
+    ],
+    "cuisine": [
+      "Franco-Tamil Fusion Creole Cuisine (Prawn Rougail, Bouillabaisse)",
+      "Kadugu Yera",
+      "Baguettes & Croissants",
+      "Idli Sambhar"
+    ],
+    "attire": "Kanjeevaram silk drapes alongside vintage French colonial resort linen dresses and shirts",
+    "languages": "Tamil, French, Telugu, Malayalam, English"
   },
   {
     "id": "punjab",
@@ -1290,7 +1680,21 @@ const stateData = [
     ],
     "culturalSummary": "The homeland of the Sikh Gurus, famous for universal hospitality (Langar), agricultural bounty, and infectious celebrations.",
     "audioStartOffset": 0.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Baisakhi (Harvest & Khalsa formation festival)",
+      "Lohri (Winter bonfire festival)",
+      "Hola Mohalla at Anandpur Sahib",
+      "Teej (Teeyan)"
+    ],
+    "cuisine": [
+      "Makki di Roti & Sarson da Saag with White Butter",
+      "Amritsari Kulcha with Chole",
+      "Butter Chicken & Tandoori Chicken",
+      "Sweet Malai Lassi"
+    ],
+    "attire": "Phulkari embroidered Dupatta with Patiala Salwar Suit; Kurta-Tehmat with bright Pagri (Turban)",
+    "languages": "Punjabi, Hindi, English"
   },
   {
     "id": "rajasthan",
@@ -1340,7 +1744,21 @@ const stateData = [
     ],
     "culturalSummary": "An empire of sandstone castles, chivalric Rajput legends, desert camel caravans, and peerless artistic royalty.",
     "audioStartOffset": 0,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Pushkar Camel & Livestock Fair",
+      "Desert Festival of Jaisalmer",
+      "Gangaur Festival",
+      "Teej Festival of Jaipur"
+    ],
+    "cuisine": [
+      "Dal Baati Churma with Pure Desi Ghee",
+      "Gatte ki Sabzi & Ker Sangri",
+      "Laal Maas (Fiery mutton curry)",
+      "Ghevar & Mawa Kachori"
+    ],
+    "attire": "Ghaghra Choli with Bandhani and Leheriya Odhani; Angrakha-Dhoti with vibrant royal Paggar (Safa/Turban)",
+    "languages": "Marwari, Rajasthani, Mewari, Dhundhari, Hindi"
   },
   {
     "id": "sikkim",
@@ -1380,7 +1798,21 @@ const stateData = [
     ],
     "culturalSummary": "India's first 100% organic state, a Himalayan ecological paradise dotted with Buddhist gompas and orchid gardens.",
     "audioStartOffset": 2,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Pang Lhabsol (Worship of Mt. Kanchenjunga)",
+      "Losar & Saga Dawa",
+      "Lhabab Duchen",
+      "International Flower Festival in Gangtok"
+    ],
+    "cuisine": [
+      "Momos & Thukpa",
+      "Gundruk & Sinki (Fermented leafy greens soup)",
+      "Phagshapa (Pork with radishes)",
+      "Sel Roti & Chhurpi"
+    ],
+    "attire": "Bakhu (Kho) floor-length robe with Honju silk blouse and striped Pangden apron for married women",
+    "languages": "Nepali, Bhutia, Lepcha, Limbu, Hindi, English"
   },
   {
     "id": "tamil-nadu",
@@ -1435,7 +1867,21 @@ const stateData = [
     ],
     "culturalSummary": "Home of classical Tamil language dating back thousands of years, monumental Dravidian temple towers (Gopurams), and Carnatic music season.",
     "audioStartOffset": 2,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Pongal (4-day harvest & sun thanksgiving)",
+      "Madurai Chithirai Festival",
+      "Margazhi Music & Dance Season in Chennai",
+      "Thaipusam"
+    ],
+    "cuisine": [
+      "Idli, Dosa & Medu Vada with Sambar",
+      "Chettinad Pepper Chicken & Kozhambu",
+      "Tirunelveli Halwa",
+      "Filter Coffee (Degree Kaapi)"
+    ],
+    "attire": "Kanchipuram Pure Mulberry Silk Sarees with gold temple zari; Veshti (Dhoti) with Angavastram and Shirt",
+    "languages": "Tamil, English"
   },
   {
     "id": "telangana",
@@ -1485,7 +1931,21 @@ const stateData = [
     ],
     "culturalSummary": "A confluence of Telugu literature, Kakatiya stone sculpting, and Deccani Nawabi culinary culture centered around historic Hyderabad.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Bathukamma (Floral festival honoring Goddess Gauri)",
+      "Bonalu Festival in Hyderabad",
+      "Medaram Sammakka Saralamma Jatara",
+      "Ugadi"
+    ],
+    "cuisine": [
+      "Authentic Hyderabadi Dum Biryani",
+      "Mirchi Ka Salan & Bagara Baingan",
+      "Sarva Pindi (Crispy rice pancake)",
+      "Qubani Ka Meetha"
+    ],
+    "attire": "Pochampally Ikat & Gadwal Silk Sarees; Pancha (Dhoti) with Kurta and Kanduva",
+    "languages": "Telugu, Urdu, Hindi, English"
   },
   {
     "id": "tripura",
@@ -1525,7 +1985,21 @@ const stateData = [
     ],
     "culturalSummary": "A peaceful state celebrated for its Manikya royal dynasty, lakeside water palaces, and giant stone-carved Shiva reliefs at Unakoti.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Kharchi Puja (Worship of 14 guardian deities)",
+      "Garia Puja",
+      "Neermahal Water Festival",
+      "Orange & Tourism Festival in Jampui Hills"
+    ],
+    "cuisine": [
+      "Mui Borok (Traditional fermented fish berma broth)",
+      "Wahan Mosdeng (Pork salad with green chilis)",
+      "Gudok (Bamboo shoot mash)",
+      "Chakhwi"
+    ],
+    "attire": "Rignai (Lower wrap) and Risa (Upper chest garment) handwoven with traditional tribal geometric motifs",
+    "languages": "Kokborok, Bengali, English"
   },
   {
     "id": "uttar-pradesh",
@@ -1581,7 +2055,21 @@ const stateData = [
     ],
     "culturalSummary": "The heartland of Indian civilization where Rama and Krishna walked, home to the sacred Ganga, the timeless city of Kashi, and the Taj Mahal.",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Kumbh Mela at Prayagraj (World's largest gathering)",
+      "Braj Holi of Mathura & Vrindavan (Lathmar Holi)",
+      "Dev Deepawali of Varanasi",
+      "Taj Mahotsav in Agra"
+    ],
+    "cuisine": [
+      "Awadhi Dum Biryani & Galouti Kebabs",
+      "Banarasi Paan & Malaiyo",
+      "Bedmi Puri with Aloo Sabzi",
+      "Agra Petha & Mathura Peda"
+    ],
+    "attire": "Lucknowi Chikankari embroidered Kurtas; Banarasi Brocade Silk Sarees with gold-silver Zari",
+    "languages": "Hindi, Urdu, Awadhi, Bhojpuri, Braj Bhasha"
   },
   {
     "id": "uttarakhand",
@@ -1631,7 +2119,21 @@ const stateData = [
     ],
     "culturalSummary": "Source of the sacred Ganga and Yamuna rivers, crowned by Himalayan peaks, spiritual hermits, and centuries of mountain folklore.",
     "audioStartOffset": 0.5,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Nanda Devi Raj Jat Yatra (Himalayan pilgrimage)",
+      "Ganga Dussehra at Haridwar",
+      "Kandali Festival in Pithoragarh",
+      "Phool Dei (Spring flower festival)"
+    ],
+    "cuisine": [
+      "Kafuli (Spinach & fenugreek gravy)",
+      "Chainsoo & Phaanu (Roasted black gram dal)",
+      "Aloo ke Gutke with Bhang Chutney",
+      "Bal Mithai of Almora"
+    ],
+    "attire": "Pichora (Yellow-saffron auspicious ceremonial drape) with large gold Nath nose ring; Kurta-Pyjama with Himachali/Kumaoni cap",
+    "languages": "Garhwali, Kumaoni, Jaunsari, Hindi"
   },
   {
     "id": "west-bengal",
@@ -1686,10 +2188,20 @@ const stateData = [
     ],
     "culturalSummary": "The intellectual capital of the Bengal Renaissance, Nobel laureate Rabindranath Tagore, the world's largest mangrove forest, and Durga Puja (UNESCO Intangible Cultural Heritage).",
     "audioStartOffset": 1,
-    "isAuthenticLive": true
+    "isAuthenticLive": true,
+    "festivals": [
+      "Durga Puja (UNESCO Intangible Cultural Heritage)",
+      "Poush Mela at Shantiniketan",
+      "Poila Boishakh (Bengali New Year)",
+      "Kolkata International Book Fair"
+    ],
+    "cuisine": [
+      "Machher Jhol with Steamed Gobindobhog Rice",
+      "Shorshe Ilish (Hilsa in mustard gravy)",
+      "Kosha Mangsho with Luchi",
+      "Rosogolla, Sandesh & Mishti Doi"
+    ],
+    "attire": "Garad & Baluchari Silk Sarees with red borders and Shankha-Pola bangles; Dhuti-Panjabi with silk chador",
+    "languages": "Bengali, English, Hindi, Nepali"
   }
 ];
-
-if (typeof module !== "undefined" && module.exports) {
-  module.exports = stateData;
-}
