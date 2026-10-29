@@ -224,43 +224,113 @@ Interactive-Geographical-Heritage-Map/
 ## 🚀 Live Demo & Local Setup
 
 ### 🌐 Live Deployment
-The interactive web map is live on Vercel:  
+The interactive web map is continuously deployed and live on Vercel:  
 👉 **[https://mini-project-heritage-map-of-india.vercel.app](https://mini-project-heritage-map-of-india.vercel.app/)**
 
 ---
 
-### Local Setup
-The project is completely self-contained and requires **zero external build tools or node modules**. It runs directly on any modern browser supporting HTML5 and ES6.
+## 💻 Local Setup Guide (First-Time Laptop Setup)
 
-### 1. Clone the Repository
+The project is completely self-contained and engineered with vanilla web technologies. It requires **zero build steps, zero compiler dependencies, and zero `npm install` packages**. 
+
+> [!IMPORTANT]
+> **Why an HTTP server is required:**  
+> The application uses the standard JavaScript `fetch()` API to dynamically load high-precision GeoJSON vector layers (`data/india_states.geojson` and `data/india_rivers.geojson`). Modern web browsers block `fetch()` under the `file:///` protocol due to strict browser CORS (Cross-Origin Resource Sharing) policies.  
+> **Always run the project through a lightweight local server (Options A, B, or C below) rather than double-clicking `index.html`.**
+
+---
+
+### Step 1: Get the Code on Your Laptop
+
+Choose either **Method 1 (Git Clone)** or **Method 2 (Downloaded ZIP)**:
+
+#### Method 1: Clone via Git (Recommended)
+Open Terminal (macOS/Linux) or Command Prompt / PowerShell (Windows) and run:
+
 ```bash
+# Standard public clone:
 git clone https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India.git
+
+# Enter the project directory:
 cd Mini-Project-Heritage-Map-of-India
 ```
 
-### 2. Launch Local Server
-
-#### Option A: Using Python (Recommended)
-Open your terminal in the cloned repository directory and run:
-
+*(Optional: If cloning a private repo or pushing commits with personal access token)*:
 ```bash
-# Python 3
-python3 -m http.server 8080
+git clone https://<YOUR_GITHUB_TOKEN>@github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India.git
+cd Mini-Project-Heritage-Map-of-India
 ```
 
-Then open your browser and navigate to:
+#### Method 2: From a Downloaded ZIP Folder
+1. Click the green **Code** button on the [GitHub repository page](https://github.com/Manya-Goel132/Mini-Project-Heritage-Map-of-India) and choose **Download ZIP** (or use the submitted project ZIP).
+2. Extract / Unzip the archive:
+   - **Windows:** Right-click the `.zip` file → Select **"Extract All..."** → Open the extracted folder.
+   - **macOS:** Double-click the `.zip` file in Finder → Open the extracted folder.
+   - **Terminal (macOS/Linux):**
+     ```bash
+     unzip Mini-Project-Heritage-Map-of-India-main.zip
+     cd Mini-Project-Heritage-Map-of-India-main
+     ```
+
+---
+
+### Step 2: Launch the Local HTTP Server
+
+Run **any one** of the following options inside the project folder:
+
+#### Option A: Python 3 (Easiest & Pre-installed on macOS / Linux / Windows)
+Open your terminal inside the project directory and run:
+
+```bash
+# macOS / Linux / Windows (Python 3)
+python3 -m http.server 8080
+
+# On Windows systems where the command is 'python':
+python -m http.server 8080
+```
+
+#### Option B: Node.js / npx (Zero package installation needed)
+If you have Node.js installed, run:
+
+```bash
+npx serve -l 8080 .
+# or
+npx http-server -p 8080
+```
+
+#### Option C: VS Code "Live Server" Extension (No Terminal Needed)
+1. Open Visual Studio Code.
+2. Select **File → Open Folder...** and choose the `Mini-Project-Heritage-Map-of-India` directory.
+3. Install the **"Live Server"** extension (by Ritwick Dey) from the VS Code Extensions tab (`Ctrl+Shift+X` or `Cmd+Shift+X`).
+4. Right-click on `index.html` in the file explorer and click **"Open with Live Server"**.
+5. Your default browser will automatically open with the project running at `http://127.0.0.1:5500`.
+
+#### Option D: PHP Built-in Server (macOS / Linux)
+```bash
+php -S localhost:8080
+```
+
+---
+
+### Step 3: Open the Platform in Your Web Browser
+
+Open any modern browser (Google Chrome, Mozilla Firefox, Safari, Microsoft Edge, Brave) and navigate to:
+
 ```text
 http://localhost:8080
 ```
+*(or the port number output by your chosen server above)*
 
-#### Option B: Using Node.js / npx
-```bash
-npx serve -l 8080 .
-```
+---
 
-#### Option C: Using VS Code Live Server
-- Install the **Live Server** extension in VS Code.
-- Right-click `index.html` and click **"Open with Live Server"**.
+### 🛠️ Quick Troubleshooting FAQ
+
+| Problem | Cause | Solution |
+| :--- | :--- | :--- |
+| **Map shows blank or state outlines don't load** | File was opened directly via `file:///.../index.html` instead of an HTTP server, causing browser CORS security to block `.geojson` fetches. | Run `python3 -m http.server 8080` or use VS Code Live Server as instructed in Step 2 above. |
+| **`Address already in use` error** | Another application is already using port `8080`. | Run the server on a different port, e.g.: `python3 -m http.server 8000` or `python3 -m http.server 3000`, then open `http://localhost:8000`. |
+| **Audio does not play on first click** | Modern browsers have autoplay restrictions that require at least one user gesture before audio can play. | Click anywhere on the map or click the **"🔊 Sound On"** header button to enable audio playback. |
+| **Map controls look small/zoomed** | Browser zoom level is set high/low. | Press `Ctrl + 0` (Windows) or `Cmd + 0` (macOS) to reset your browser zoom to standard 100%. |
 
 ---
 
