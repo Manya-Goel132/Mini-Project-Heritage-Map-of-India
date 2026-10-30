@@ -642,17 +642,21 @@ body::before {
 
 /* River Glow & Interactive Lines */
 .river-glow-line {
-  pointer-events: none;
-  filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.6));
+  pointer-events: none !important;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
 }
 
 .river-core-line {
   cursor: pointer;
-  transition: stroke 0.2s ease, stroke-width 0.2s ease, filter 0.2s ease;
+  pointer-events: stroke !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.15s ease, stroke-width 0.15s ease, filter 0.15s ease;
 }
 
 .river-core-line:hover {
-  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.95)) drop-shadow(0 0 18px rgba(6, 182, 212, 0.8));
+  stroke: #ffffff !important;
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.95)) drop-shadow(0 0 20px rgba(6, 182, 212, 0.9)) !important;
 }
 
 /* Custom River Tooltip */

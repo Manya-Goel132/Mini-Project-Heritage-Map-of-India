@@ -211,6 +211,18 @@
       keyboard: false // Prevents Leaflet container focus from scrolling the viewport
     });
 
+    // Dedicated Leaflet Panes for guaranteed z-index hierarchy
+    // (Default tilePane is 200, overlayPane is 400)
+    map.createPane('statesPane');
+    map.getPane('statesPane').style.zIndex = 400;
+
+    map.createPane('riversGlowPane');
+    map.getPane('riversGlowPane').style.zIndex = 440;
+    map.getPane('riversGlowPane').style.pointerEvents = 'none';
+
+    map.createPane('riversPane');
+    map.getPane('riversPane').style.zIndex = 480;
+
     // Custom Zoom Control top-right
     L.control.zoom({ position: 'topright' }).addTo(map);
 
@@ -259,6 +271,7 @@
       const geojsonData = await response.json();
 
       geojsonLayer = L.geoJSON(geojsonData, {
+        pane: 'statesPane',
         style: styleFeature,
         onEachFeature: onEachFeature
       }).addTo(map);
@@ -288,26 +301,32 @@
         riverDataMap.set(props.id, { feature: f, props: props });
       });
 
-      // 1. Subtle glowing ambient line under rivers
+      // 1. Subtle glowing ambient line under rivers (non-interactive so it never blocks events)
       riverGlowLayer = L.geoJSON(riversGeoJSON, {
+        pane: 'riversGlowPane',
+        interactive: false,
         style: function (f) {
           return {
             color: f.properties.color || '#38bdf8',
-            weight: (f.properties.weight || 3) + 3.5,
-            opacity: 0.28,
-            className: 'river-glow-line'
+            weight: (f.properties.weight || 3) + 4.5,
+            opacity: 0.35,
+            className: 'river-glow-line',
+            pane: 'riversGlowPane',
+            interactive: false
           };
         }
       }).addTo(map);
 
-      // 2. Interactive crisp river centerlines
+      // 2. Interactive crisp river centerlines in dedicated top pane
       riverLayer = L.geoJSON(riversGeoJSON, {
+        pane: 'riversPane',
         style: function (f) {
           return {
             color: f.properties.color || '#38bdf8',
-            weight: f.properties.weight || 3,
+            weight: (f.properties.weight || 3) + 1.8,
             opacity: 0.95,
-            className: 'river-core-line'
+            className: 'river-core-line',
+            pane: 'riversPane'
           };
         },
         onEachFeature: onEachRiverFeature
@@ -362,7 +381,8 @@
       opacity: 0.85,
       color: color,
       fillOpacity: fillOpacity,
-      dashArray: ''
+      dashArray: '',
+      pane: 'statesPane'
     };
   }
 
@@ -403,9 +423,12 @@
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
           target.bringToFront();
         }
+        // Guarantee that river centerlines stay above any hovered state
+        if (riverLayer) riverLayer.bringToFront();
       },
       mouseout: function (e) {
         geojsonLayer.resetStyle(e.target);
+        if (riverLayer) riverLayer.bringToFront();
       },
       click: function (e) {
         if (stateInfo) {
